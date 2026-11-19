@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Janucá - Festival de las Luces</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="container">
+  <h1>🕎 Janucá - Festival de las Luces</h1>
+  <div class="big-date" id="bigDate">Janucá 2026 comienza el viernes 4 de diciembre</div>
+  <div class="countdown" id="countdown">Calculando...</div>
+  <div class="status-bar" id="statusBar">Espera...</div>
+
+  <div class="location">
+    <label>País / Ciudad: </label>
+    <select id="citySelect" onchange="onCityChange()">
+      <option value="caracas">Venezuela - Caracas</option>
+      <option value="maracaibo">Venezuela - Maracaibo</option>
+      <option value="valencia">Venezuela - Valencia</option>
+      <option value="bogota">Colombia - Bogotá</option>
+      <option value="lima">Perú - Lima</option>
+      <option value="buenosaires">Argentina - Buenos Aires</option>
+      <option value="santiago">Chile - Santiago</option>
+      <option value="mexico">México - CDMX</option>
+      <option value="madrid">España - Madrid</option>
+      <option value="nyc">EE.UU. - Nueva York</option>
+      <option value="jerusalen">Israel - Jerusalem</option>
+      <option value="custom">📍 Usar mi ubicación (GPS)</option>
+    </select>
+    <label style="margin-left:8px;">Modo: </label>
+    <select id="modeSelect" onchange="recompute()">
+      <option value="diáspora">Diáspora (18 min viernes)</option>
+      <option value="israel">Israel (40 min viernes)</option>
+    </select>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="demoBtn" onclick="toggleDemo()">🎓 Modo demostración</button>
+    <button class="btn" onclick="startGuide()">📖 Guía paso a paso</button>
+    <button class="btn" id="autoBtn" onclick="autoLight()">🔥 Encender automático</button>
+    <button class="btn" onclick="resetCandles()">🔄 Reiniciar</button>
+  </div>
+
+  <div class="day-tabs" id="dayTabs"></div>
+
+  <div id="guideBox">Selecciona un día o usa la guía para aprender a encender las velas.</div>
+
+  <div class="menorah-container" id="menorahContainer">
+    <img src="img/dias_candelabro/dia_1.png" alt="Menorá" class="menorah-image" id="menorahImage">
+    <div class="flame shamash" id="shamashFlame"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Bendiciones del encendido</h2>
+    <div class="blessing"><div class="heb">בָּרוּךְ אַתָּה ה' אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ לְהַדְלִיק נֵר שֶׁל חֲנֻכָּה</div>Baruj Atá Adonai... que nos santificó con Sus mandamientos y nos ordenó encender la vela de Janucá.</div>
+    <div class="blessing"><div class="heb">שֶׁעָשָׂה נִסִּים לַאֲבוֹתֵינוּ בַּיָּמִים הָהֵם בַּזְּמַן הַזֶּה</div>She asá nisim la avotenu... que hizo milagros a nuestros padres en aquellos días, en esta época.</div>
+    <div class="blessing" id="shehejeianu"><div class="heb">שֶׁהֶחֱיָנוּ וְקִיְּמָנוּ וְהִגִּיעָנוּ לַזְּמַן הַזֶּה</div>Shehejeianu... que nos dio vida y nos hizo llegar a este momento. <em>(solo la primera noche)</em></div>
+  </div>
+
+  <div class="panel">
+    <h2>Guía completa de Janucá</h2>
+    <p>Dura 8 noches, del 25 de Kislev. En 2026 va del atardecer del viernes 4 al anochecer del sábado 12 de diciembre.</p>
+    <p>Se enciende una vela más cada noche (8 en total) más el Shamash, la vela piloto que se enciende primero y se usa para encender las demás.</p>
+    <p>La hora es al anochecer (unos 30 min tras el atardecer); en viernes se enciende antes del atardecer (18 min, o 40 en Israel) por Shabat, y en sábado después de la salida de Shabat.</p>
+    <p>Orden: enciende el Shamash, di las bendiciones, y enciende la vela nueva primero, de izquierda a derecha.</p>
+    <p class="note">La hora mostrada se calcula con el atardecer real de tu ciudad.</p>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/sunset.js"></script>
+<script src="js/state.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/menorah.js"></script>
+<script src="js/guide.js"></script>
+<script src="js/location.js"></script>
+<script src="js/init.js"></script>
+</body>
+</html>
