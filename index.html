@@ -41,6 +41,22 @@
     <button class="btn" onclick="startGuide()">📖 Guía paso a paso</button>
     <button class="btn" id="autoBtn" onclick="autoLight()">🔥 Encender automático</button>
     <button class="btn" onclick="resetCandles()">🔄 Reiniciar</button>
+    <button class="btn" id="debugBtn" onclick="toggleDebug()">🔍 Modo depuración</button>
+  </div>
+
+  <div style="margin:10px 0; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center;">
+    <button class="btn" onclick="getDebugResult()">📋 Copiar resultado</button>
+    <button class="btn" onclick="resetDebug()">🗑️ Limpiar marcas</button>
+    <select id="debugNightSelect" onchange="setDebugNight(+this.value)">
+      <option value="1">Depurar Noche 1</option>
+      <option value="2">Depurar Noche 2</option>
+      <option value="3">Depurar Noche 3</option>
+      <option value="4">Depurar Noche 4</option>
+      <option value="5">Depurar Noche 5</option>
+      <option value="6">Depurar Noche 6</option>
+      <option value="7">Depurar Noche 7</option>
+      <option value="8">Depurar Noche 8</option>
+    </select>
   </div>
 
   <div class="day-tabs" id="dayTabs"></div>
@@ -76,6 +92,7 @@
 <script src="js/menorah.js"></script>
 <script src="js/guide.js"></script>
 <script src="js/location.js"></script>
+<script src="js/debug.js"></script>
 <script src="js/init.js"></script>
 </body>
 </html>
