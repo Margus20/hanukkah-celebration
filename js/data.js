@@ -6,24 +6,24 @@ const NOCHES = [
   {y:2026,m:12,d:8},{y:2026,m:12,d:9},{y:2026,m:12,d:10},{y:2026,m:12,d:11}
 ];
 
-// Coordenadas de la PUNTA DE LA MECHA (donde va la llama)
-// Las velas se dibujan HACIA ABAJO desde aquí
+// Coordenadas de la BASE de cada vela (donde está el portavelas)
+// Las velas crecen HACIA ARRIBA desde aquí
 // Orden: vela1, vela2, vela3, vela4, shamash, vela5, vela6, vela7, vela8
 const WICK_POSITIONS = [
-  {x:150, y:280},   // vela 1 - punta de mecha
-  {x:200, y:270},   // vela 2
-  {x:250, y:260},   // vela 3
-  {x:290, y:250},   // vela 4
-  {x:350, y:200},   // shamash (más alto)
-  {x:410, y:250},   // vela 5
-  {x:450, y:260},   // vela 6
-  {x:500, y:270},   // vela 7
-  {x:550, y:280}    // vela 8
+  {x:150, y:330},   // vela 1 - base
+  {x:200, y:320},   // vela 2
+  {x:250, y:310},   // vela 3
+  {x:290, y:300},   // vela 4
+  {x:350, y:290},   // shamash (base más baja pero vela más larga)
+  {x:410, y:300},   // vela 5
+  {x:450, y:310},   // vela 6
+  {x:500, y:320},   // vela 7
+  {x:550, y:330}    // vela 8
 ];
 
-// Longitud de las velas (hacia abajo desde la mecha)
+// Longitud de las velas (hacia arriba desde la base)
 const CANDLE_LENGTH = 70;
-const SHAMASH_LENGTH = 90;
+const SHAMASH_LENGTH = 110;
 
 // Ciudades
 const CIUDADES = {
