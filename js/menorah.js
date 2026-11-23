@@ -9,13 +9,13 @@ let isDragging = false;
 let dragFlame = null;
 let litCandles = new Set();
 
-// Dibujar portavelas (bases doradas bajo cada mecha)
+// Dibujar portavelas (bases doradas)
 function drawHolders() {
   holdersGroup.innerHTML = '';
   WICK_POSITIONS.forEach(pos => {
     const h = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     h.setAttribute('x', pos.x - 15);
-    h.setAttribute('y', pos.y + 5);
+    h.setAttribute('y', pos.y - 5);
     h.setAttribute('width', 30);
     h.setAttribute('height', 10);
     h.setAttribute('fill', 'url(#goldGrad)');
@@ -24,7 +24,7 @@ function drawHolders() {
   });
 }
 
-// Dibujar todas las velas (hacia abajo desde la mecha)
+// Dibujar todas las velas (hacia arriba desde la base)
 function drawCandles() {
   candlesGroup.innerHTML = '';
   WICK_POSITIONS.forEach((pos, i) => {
@@ -34,11 +34,12 @@ function drawCandles() {
     // Si está encendida, se acorta un poco
     const consumed = isLit ? 15 : 0;
     const actualLength = length - consumed;
+    const topY = pos.y - actualLength; // parte superior de la vela
     
-    // Vela (rectángulo hacia abajo desde la mecha)
+    // Vela (rectángulo hacia arriba desde la base)
     const candle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     candle.setAttribute('x', pos.x - 8);
-    candle.setAttribute('y', pos.y);
+    candle.setAttribute('y', topY);
     candle.setAttribute('width', 16);
     candle.setAttribute('height', actualLength);
     candle.setAttribute('fill', 'url(#candleGrad)');
@@ -50,21 +51,30 @@ function drawCandles() {
     // Mecha (línea negra de 6px arriba de la vela)
     const wick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     wick.setAttribute('x1', pos.x);
-    wick.setAttribute('y1', pos.y);
+    wick.setAttribute('y1', topY);
     wick.setAttribute('x2', pos.x);
-    wick.setAttribute('y2', pos.y - 6);
+    wick.setAttribute('y2', topY - 6);
     wick.setAttribute('stroke', '#333');
     wick.setAttribute('stroke-width', 2);
+    wick.setAttribute('data-idx', i);
     candlesGroup.appendChild(wick);
   });
 }
 
-// Dibujar una llama EN LA PUNTA DE LA MECHA
+// Dibujar una llama en la punta de la mecha
 function drawFlame(pos, idx) {
+  const isShamash = (idx === 4);
+  const isLit = litCandles.has(idx);
+  const length = isShamash ? SHAMASH_LENGTH : CANDLE_LENGTH;
+  const consumed = isLit ? 15 : 0;
+  const actualLength = length - consumed;
+  const topY = pos.y - actualLength;
+  // La llama va 10px arriba de la punta de la mecha
+  const flameY = topY - 16;
+  
   const flame = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-  // La llama va 10px ARRIBA de la punta de la mecha (pos.y)
   flame.setAttribute('cx', pos.x);
-  flame.setAttribute('cy', pos.y - 10);
+  flame.setAttribute('cy', flameY);
   flame.setAttribute('rx', 10);
   flame.setAttribute('ry', 18);
   flame.setAttribute('fill', 'url(#flameGrad)');
