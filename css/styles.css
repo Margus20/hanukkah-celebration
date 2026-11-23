@@ -1,84 +1,119 @@
+/* ====== RESET Y BASE MOBILE-FIRST ====== */
 * { margin:0; padding:0; box-sizing:border-box; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
 body {
   font-family:'Georgia', serif;
   background:linear-gradient(135deg,#0b1d3a 0%,#16386e 60%,#1e3c72 100%);
   min-height:100vh; display:flex; flex-direction:column; align-items:center;
-  padding:16px; color:#fff; user-select:none;
+  padding:12px; color:#fff; user-select:none;
 }
 .container { text-align:center; max-width:920px; width:100%; }
-h1 { font-size:2.2em; margin-bottom:8px; text-shadow:2px 2px 4px rgba(0,0,0,.5); }
+h1 { font-size:1.6em; margin-bottom:8px; text-shadow:2px 2px 4px rgba(0,0,0,.5); line-height:1.2; }
 
+/* ====== FECHA GRANDE Y CUENTA REGRESIVA ====== */
 .big-date {
-  font-size:1.6em; color:gold; margin:6px 0; font-weight:bold;
-  text-shadow:0 0 12px rgba(255,215,0,.4);
+  font-size:1.1em; color:gold; margin:6px 0; font-weight:bold;
+  text-shadow:0 0 12px rgba(255,215,0,.4); line-height:1.3;
 }
 .countdown {
-  font-size:1.15em; background:rgba(255,215,0,.15); border:1px solid gold;
-  display:inline-block; padding:8px 18px; border-radius:30px; margin:6px 0 14px;
+  font-size:0.95em; background:rgba(255,215,0,.15); border:1px solid gold;
+  display:inline-block; padding:8px 14px; border-radius:30px; margin:6px 0 10px;
 }
 .status-bar {
-  font-size:1.2em; padding:10px; border-radius:10px; margin:10px 0;
-  background:rgba(255,255,255,.08);
+  font-size:0.95em; padding:10px; border-radius:10px; margin:10px 0;
+  background:rgba(255,255,255,.08); line-height:1.4;
 }
 .status-bar.ready { background:rgba(46,204,113,.25); border:1px solid #2ecc71; }
 .status-bar.wait  { background:rgba(231,76,60,.2); border:1px solid #e74c3c; }
 
+/* ====== UBICACIÓN Y CONTROLES ====== */
 .location { margin:12px 0; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center; }
+.location label { font-size:0.9em; }
 select, .btn {
   background:rgba(255,215,0,.25); border:1px solid gold; color:#fff;
-  padding:8px 14px; border-radius:8px; font-size:.95em; cursor:pointer;
+  padding:10px 14px; border-radius:8px; font-size:0.9em; cursor:pointer;
+  min-height:44px; /* tamaño mínimo táctil */
+  -webkit-tap-highlight-color: transparent;
 }
+select { max-width:100%; }
 select option { color:#000; }
-.controls { margin:14px 0; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+.controls { margin:10px 0; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
 .btn:hover { background:rgba(255,215,0,.45); transform:scale(1.04); }
+.btn:active { transform:scale(0.96); }
 .btn:disabled { opacity:.4; cursor:not-allowed; }
 .btn.on { background:rgba(255,215,0,.6); box-shadow:0 0 14px gold; }
 
+/* ====== PESTAÑAS DE NOCHES ====== */
 .day-tabs { display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin:10px 0; }
 .day-tabs button {
   background:rgba(255,255,255,.12); border:1px solid #fff; color:#fff;
-  padding:7px 12px; border-radius:6px; cursor:pointer;
+  padding:8px 12px; border-radius:6px; cursor:pointer; font-size:0.85em;
+  min-height:40px;
 }
 .day-tabs button.active { background:rgba(255,215,0,.4); border-color:gold; }
 .day-tabs button.locked { opacity:.35; }
 
+/* ====== MENORÁ SVG ====== */
 .menorah-container {
-  position:relative; width:100%; max-width:720px; height:430px; margin:18px auto;
-  background:rgba(0,0,0,.35); border-radius:16px; overflow:hidden; touch-action:none;
+  position:relative; width:100%; max-width:720px; margin:14px auto;
+  background:rgba(0,0,0,.35); border-radius:16px; overflow:hidden;
+  aspect-ratio: 700 / 450;
 }
-.menorah-image { width:100%; height:100%; object-fit:contain; display:block; }
+.menorah-container svg { width:100%; height:100%; display:block; }
+#shamashFlame { display:none; } /* usamos llamas SVG */
 
-.flame {
-  position:absolute; width:24px; height:34px;
-  background:radial-gradient(ellipse at center,#ffeb3b 0%,#ff9800 40%,#ff5722 70%,transparent 100%);
-  border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
-  animation:flicker .5s infinite alternate; filter:blur(1px); opacity:0;
-  pointer-events:none; z-index:10; transition:opacity .3s;
+/* ====== LLAMAS SVG ====== */
+.flame-svg {
+  animation: flickerSvg .5s infinite alternate;
+  transform-origin: center bottom;
 }
-.flame.lit { opacity:1; }
-.flame::before { content:''; position:absolute; width:100%; height:100%;
-  background:radial-gradient(ellipse at center,rgba(255,255,255,.9) 0%,transparent 70%);
-  border-radius:50%; animation:innerFlicker .3s infinite alternate; }
-.flame::after { content:''; position:absolute; width:160%; height:160%;
-  background:radial-gradient(ellipse at center,rgba(255,152,0,.4) 0%,transparent 70%);
-  border-radius:50%; top:-30%; left:-30%; animation:glow 1s infinite alternate; }
-.flame.shamash { opacity:1; cursor:grab; pointer-events:auto; }
-.flame.dragging { opacity:1; cursor:grabbing; pointer-events:auto; }
+@keyframes flickerSvg {
+  0% { transform: translateY(0) scale(1, 1) rotate(-2deg); opacity:.9; }
+  100% { transform: translateY(-2px) scale(.95, 1.05) rotate(2deg); opacity:1; }
+}
 
-.candle-zone { position:absolute; width:42px; height:42px; cursor:pointer; z-index:5;
-  border:2px dashed transparent; border-radius:50%; }
-.candle-zone.target { border-color:gold; animation:pulse 1s infinite; }
-
-@keyframes flicker { 0%{transform:translateY(0) scale(1,1) rotate(-2deg);opacity:.9;}
-  100%{transform:translateY(-2px) scale(.95,1.05) rotate(2deg);opacity:1;} }
-@keyframes innerFlicker { 0%{transform:scale(1);opacity:.8;} 100%{transform:scale(1.1);opacity:1;} }
-@keyframes glow { 0%{transform:scale(1);opacity:.5;} 100%{transform:scale(1.2);opacity:.8;} }
-@keyframes pulse { 0%,100%{box-shadow:0 0 0 rgba(255,215,0,.6);} 50%{box-shadow:0 0 16px rgba(255,215,0,.9);} }
-
-.panel { background:rgba(255,255,255,.08); padding:16px; border-radius:12px; margin:16px 0; text-align:left; }
-.panel h2 { color:gold; margin-bottom:10px; text-align:center; }
-.panel p { line-height:1.6; margin-bottom:8px; }
+/* ====== GUÍA Y PANELES ====== */
+#guideBox { background:rgba(46,204,113,.15); border:1px solid #2ecc71; padding:12px; border-radius:10px; margin:10px 0; min-height:40px; font-size:0.95em; line-height:1.4; }
+.panel { background:rgba(255,255,255,.08); padding:14px; border-radius:12px; margin:14px 0; text-align:left; }
+.panel h2 { color:gold; margin-bottom:10px; text-align:center; font-size:1.15em; }
+.panel p { line-height:1.6; margin-bottom:8px; font-size:0.95em; }
 .blessing { background:rgba(255,215,0,.1); border-left:4px solid gold; padding:10px; margin:8px 0; border-radius:6px; }
-.blessing .heb { font-size:1.2em; direction:rtl; text-align:right; }
-#guideBox { background:rgba(46,204,113,.15); border:1px solid #2ecc71; padding:12px; border-radius:10px; margin:10px 0; min-height:40px; }
-.note { font-size:.9em; opacity:.8; margin-top:8px; }
+.blessing .heb { font-size:1.1em; direction:rtl; text-align:right; margin-bottom:4px; }
+.note { font-size:.85em; opacity:.8; margin-top:8px; }
+
+/* ====== RESPONSIVE: TABLETA (768px+) ====== */
+@media (min-width: 768px) {
+  body { padding:20px; }
+  h1 { font-size:2.2em; }
+  .big-date { font-size:1.6em; }
+  .countdown { font-size:1.15em; padding:10px 20px; }
+  .status-bar { font-size:1.1em; }
+  select, .btn { font-size:1em; padding:12px 18px; }
+  .day-tabs button { font-size:1em; padding:10px 16px; }
+  .panel { padding:20px; }
+  .panel h2 { font-size:1.3em; }
+  .panel p { font-size:1em; }
+  .blessing .heb { font-size:1.2em; }
+  #guideBox { font-size:1.05em; }
+}
+
+/* ====== RESPONSIVE: ESCRITORIO (1024px+) ====== */
+@media (min-width: 1024px) {
+  .container { max-width:920px; }
+  h1 { font-size:2.5em; }
+  .big-date { font-size:1.8em; }
+}
+
+/* ====== RESPONSIVE: PANTALLAS MUY PEQUEÑAS (320px) ====== */
+@media (max-width: 360px) {
+  body { padding:8px; }
+  h1 { font-size:1.3em; }
+  .big-date { font-size:0.95em; }
+  .countdown { font-size:0.85em; padding:6px 10px; }
+  select, .btn { font-size:0.8em; padding:8px 10px; min-height:40px; }
+  .day-tabs button { font-size:0.75em; padding:6px 8px; }
+  .panel { padding:10px; }
+  .panel h2 { font-size:1em; }
+  .panel p { font-size:0.85em; }
+  .blessing .heb { font-size:1em; }
+}
