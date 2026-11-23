@@ -71,26 +71,22 @@
       <ellipse cx="350" cy="420" rx="120" ry="15" fill="url(#goldGrad)"/>
       <rect x="330" y="380" width="40" height="40" fill="url(#goldGrad)"/>
       
-      <!-- Brazo central (Shamash) -->
+      <!-- Tronco central -->
       <rect x="345" y="290" width="10" height="130" fill="url(#goldGrad)"/>
       
-      <!-- Brazos curvos izquierdos (conectan exactamente con las bases de las velas) -->
-      <path d="M 345 330 Q 250 330 150 330" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 345 320 Q 270 320 200 320" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 345 310 Q 295 310 250 310" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 345 300 Q 320 300 290 300" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <!-- Brazos que nacen del tronco y suben en arco hasta cada vela (Curvas C para conexión suave) -->
+      <path d="M 350 400 C 260 400, 150 380, 150 330" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 350 385 C 280 385, 200 365, 200 320" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 350 370 C 300 370, 250 355, 250 310" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 350 360 C 320 360, 290 345, 290 300" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 350 360 C 380 360, 410 345, 410 300" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 350 370 C 400 370, 450 355, 450 310" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 350 385 C 420 385, 500 365, 500 320" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 350 400 C 440 400, 550 380, 550 330" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
       
-      <!-- Brazos curvos derechos (conectan exactamente con las bases de las velas) -->
-      <path d="M 355 300 Q 380 300 410 300" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 355 310 Q 405 310 450 310" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 355 320 Q 430 320 500 320" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 355 330 Q 450 330 550 330" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      
-      <!-- Portavelas (se generan con JS) -->
+      <!-- Portavelas, Velas y Llamas (se generan con JS) -->
       <g id="holders"></g>
-      <!-- Velas (se generan con JS) -->
       <g id="candles"></g>
-      <!-- Llamas (se generan con JS) -->
       <g id="flames"></g>
     </svg>
   </div>
@@ -112,6 +108,9 @@
     <p class="note">💡 <strong>Tip:</strong> Toca directamente cualquier vela para encenderla, o usa el botón "Encender automático".</p>
   </div>
 </div>
+
+<!-- Cuadro de aviso personalizado (Toast) -->
+<div id="toast" class="toast"></div>
 
 <script src="js/data.js"></script>
 <script src="js/sunset.js"></script>
