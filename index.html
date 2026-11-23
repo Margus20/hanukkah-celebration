@@ -66,25 +66,31 @@
           <stop offset="100%" style="stop-color:#ff5722;stop-opacity:0"/>
         </radialGradient>
       </defs>
-      <!-- Base -->
+      
+      <!-- Base del candelabro -->
       <ellipse cx="350" cy="420" rx="120" ry="15" fill="url(#goldGrad)"/>
       <rect x="330" y="380" width="40" height="40" fill="url(#goldGrad)"/>
-      <!-- Brazo central -->
-      <rect x="345" y="200" width="10" height="180" fill="url(#goldGrad)"/>
-      <!-- Brazos curvos -->
-      <path d="M 345 340 Q 250 340 150 280" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 345 320 Q 270 320 200 270" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 345 300 Q 290 300 250 260" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 345 280 Q 310 280 290 250" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 355 340 Q 450 340 550 280" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 355 320 Q 430 320 500 270" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 355 300 Q 410 300 450 260" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 355 280 Q 390 280 410 250" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <!-- Portavelas -->
+      
+      <!-- Brazo central (Shamash) -->
+      <rect x="345" y="290" width="10" height="130" fill="url(#goldGrad)"/>
+      
+      <!-- Brazos curvos izquierdos (conectan exactamente con las bases de las velas) -->
+      <path d="M 345 330 Q 250 330 150 330" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 345 320 Q 270 320 200 320" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 345 310 Q 295 310 250 310" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 345 300 Q 320 300 290 300" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      
+      <!-- Brazos curvos derechos (conectan exactamente con las bases de las velas) -->
+      <path d="M 355 300 Q 380 300 410 300" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 355 310 Q 405 310 450 310" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 355 320 Q 430 320 500 320" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 355 330 Q 450 330 550 330" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      
+      <!-- Portavelas (se generan con JS) -->
       <g id="holders"></g>
-      <!-- Velas -->
+      <!-- Velas (se generan con JS) -->
       <g id="candles"></g>
-      <!-- Llamas -->
+      <!-- Llamas (se generan con JS) -->
       <g id="flames"></g>
     </svg>
   </div>
@@ -103,6 +109,7 @@
     <p>La hora es al anochecer (unos 30 min tras el atardecer); en viernes se enciende antes del atardecer (18 min, o 40 en Israel) por Shabat, y en sábado después de la salida de Shabat.</p>
     <p>Orden: enciende el Shamash, di las bendiciones, y enciende la vela nueva primero, de izquierda a derecha.</p>
     <p class="note">El candelabro está dibujado con código, así que las llamas siempre caen en las mechas.</p>
+    <p class="note">💡 <strong>Tip:</strong> Toca directamente cualquier vela para encenderla, o usa el botón "Encender automático".</p>
   </div>
 </div>
 
