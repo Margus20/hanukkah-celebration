@@ -41,22 +41,6 @@
     <button class="btn" onclick="startGuide()">📖 Guía paso a paso</button>
     <button class="btn" id="autoBtn" onclick="autoLight()">🔥 Encender automático</button>
     <button class="btn" onclick="resetCandles()">🔄 Reiniciar</button>
-    <button class="btn" id="debugBtn" onclick="toggleDebug()">🔍 Modo depuración</button>
-  </div>
-
-  <div style="margin:10px 0; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center;">
-    <button class="btn" onclick="getDebugResult()">📋 Copiar resultado</button>
-    <button class="btn" onclick="resetDebug()">🗑️ Limpiar marcas</button>
-    <select id="debugNightSelect" onchange="setDebugNight(+this.value)">
-      <option value="1">Depurar Noche 1</option>
-      <option value="2">Depurar Noche 2</option>
-      <option value="3">Depurar Noche 3</option>
-      <option value="4">Depurar Noche 4</option>
-      <option value="5">Depurar Noche 5</option>
-      <option value="6">Depurar Noche 6</option>
-      <option value="7">Depurar Noche 7</option>
-      <option value="8">Depurar Noche 8</option>
-    </select>
   </div>
 
   <div class="day-tabs" id="dayTabs"></div>
@@ -64,7 +48,45 @@
   <div id="guideBox">Selecciona un día o usa la guía para aprender a encender las velas.</div>
 
   <div class="menorah-container" id="menorahContainer">
-    <img src="img/dias_candelabro/dia_1.png" alt="Menorá" class="menorah-image" id="menorahImage">
+    <svg id="menorahSVG" viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#ffd700"/>
+          <stop offset="50%" style="stop-color:#daa520"/>
+          <stop offset="100%" style="stop-color:#b8860b"/>
+        </linearGradient>
+        <linearGradient id="candleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#fff"/>
+          <stop offset="100%" style="stop-color:#f0f0f0"/>
+        </linearGradient>
+        <radialGradient id="flameGrad">
+          <stop offset="0%" style="stop-color:#fff"/>
+          <stop offset="30%" style="stop-color:#ffeb3b"/>
+          <stop offset="70%" style="stop-color:#ff9800"/>
+          <stop offset="100%" style="stop-color:#ff5722;stop-opacity:0"/>
+        </radialGradient>
+      </defs>
+      <!-- Base -->
+      <ellipse cx="350" cy="420" rx="120" ry="15" fill="url(#goldGrad)"/>
+      <rect x="330" y="380" width="40" height="40" fill="url(#goldGrad)"/>
+      <!-- Brazo central -->
+      <rect x="345" y="200" width="10" height="180" fill="url(#goldGrad)"/>
+      <!-- Brazos curvos (4 a cada lado) -->
+      <path d="M 345 340 Q 250 340 150 280" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 345 320 Q 270 320 200 270" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 345 300 Q 290 300 250 260" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 345 280 Q 310 280 290 250" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 355 340 Q 450 340 550 280" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 355 320 Q 430 320 500 270" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 355 300 Q 410 300 450 260" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <path d="M 355 280 Q 390 280 410 250" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <!-- Portavelas (9) -->
+      <g id="holders"></g>
+      <!-- Velas (se dibujan dinámicamente) -->
+      <g id="candles"></g>
+      <!-- Llamas -->
+      <g id="flames"></g>
+    </svg>
     <div class="flame shamash" id="shamashFlame"></div>
   </div>
 
@@ -81,7 +103,7 @@
     <p>Se enciende una vela más cada noche (8 en total) más el Shamash, la vela piloto que se enciende primero y se usa para encender las demás.</p>
     <p>La hora es al anochecer (unos 30 min tras el atardecer); en viernes se enciende antes del atardecer (18 min, o 40 en Israel) por Shabat, y en sábado después de la salida de Shabat.</p>
     <p>Orden: enciende el Shamash, di las bendiciones, y enciende la vela nueva primero, de izquierda a derecha.</p>
-    <p class="note">La hora mostrada se calcula con el atardecer real de tu ciudad.</p>
+    <p class="note">El candelabro está dibujado con código, así que las llamas siempre caen en las mechas.</p>
   </div>
 </div>
 
@@ -92,7 +114,6 @@
 <script src="js/menorah.js"></script>
 <script src="js/guide.js"></script>
 <script src="js/location.js"></script>
-<script src="js/debug.js"></script>
 <script src="js/init.js"></script>
 </body>
 </html>
