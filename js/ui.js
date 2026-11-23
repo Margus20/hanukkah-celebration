@@ -1,5 +1,6 @@
 // ====== INTERFAZ DE USUARIO (UI) ======
 
+// Pinta los botones de las 8 noches y bloquea las que aún no han llegado
 function renderDayTabs(active) {
   const tabs = document.getElementById('dayTabs');
   tabs.innerHTML = '';
@@ -20,10 +21,10 @@ function renderDayTabs(active) {
   }
 }
 
+// Cambiar a una noche concreta: redibuja el SVG con el estado correcto
 function setNight(n, locked) {
   currentNight = n;
-  document.getElementById('menorahImage').src = 'img/dias_candelabro/dia_' + n + '.png';
-  resetCandles();
+  initMenorah(); // dibuja portavelas, velas y el Shamash encendido
   document.getElementById('shehejeianu').style.display = (n === 1) ? 'block' : 'none';
   document.getElementById('guideBox').textContent = locked
     ? '🔒 Noche ' + n + ' bloqueada (no ha llegado la hora). Usa el Modo demostración para practicar.'
