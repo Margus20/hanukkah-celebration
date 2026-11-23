@@ -1,4 +1,4 @@
-// ====== GUÍA PASO A PASO ======
+// ====== GUÍA PASO A PASO (adaptada a SVG) ======
 let guideActive = false;
 let guideStep = 0;
 
@@ -19,8 +19,8 @@ function nextGuideStep() {
     g.innerHTML = '<strong>Paso 2:</strong> Recita las bendiciones (mira el panel de abajo).';
   } else if (guideStep - 2 < targetIdxs.length) {
     const i = guideStep - 2;
-    g.innerHTML = '<strong>Paso ' + (i + 3) + ':</strong> Arrastra el Shamash hasta la vela resaltada (vela nueva primero).';
-    highlight(targetIdxs[i]);
+    g.innerHTML = '<strong>Paso ' + (i + 3) + ':</strong> Toca la llama del Shamash y arrástrala hasta la vela resaltada en amarillo.';
+    highlightCandle(targetIdxs[i]);
   } else {
     g.innerHTML = '¡Listo! Encendiste las ' + currentNight + ' velas de la noche ' + currentNight + '. 🕎';
     guideActive = false;
@@ -29,7 +29,7 @@ function nextGuideStep() {
   guideStep++;
 }
 
-// Orden halájico: la vela nueva primero.
+// Orden halájico: la vela nueva primero (de izquierda a derecha en el juego)
 function candleOrderForNight(n) {
   const left = [0, 1, 2, 3];
   const right = [5, 6, 7, 8];
@@ -37,12 +37,27 @@ function candleOrderForNight(n) {
   return all.slice(0, n);
 }
 
-function highlight(idx) {
+// Resaltar una vela en el SVG (cambia su color temporalmente)
+function highlightCandle(idx) {
   clearHighlight();
-  const z = document.querySelector('.candle-zone[data-idx="' + idx + '"]');
-  if (z) z.classList.add('target');
+  const pos = WICK_POSITIONS[idx];
+  const candleHeight = (idx === 4) ? SHAMASH_HEIGHT : CANDLE_HEIGHT;
+  
+  // Crear un rectángulo de resaltado
+  const highlight = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  highlight.setAttribute('x', pos.x - 12);
+  highlight.setAttribute('y', pos.y - candleHeight - 5);
+  highlight.setAttribute('width', 24);
+  highlight.setAttribute('height', candleHeight + 10);
+  highlight.setAttribute('fill', 'rgba(255, 215, 0, 0.3)');
+  highlight.setAttribute('stroke', 'gold');
+  highlight.setAttribute('stroke-width', 2);
+  highlight.setAttribute('rx', 4);
+  highlight.id = 'highlight-' + idx;
+  candlesGroup.appendChild(highlight);
 }
 
 function clearHighlight() {
-  document.querySelectorAll('.candle-zone.target').forEach(z => z.classList.remove('target'));
+  const highlights = document.querySelectorAll('[id^="highlight-"]');
+  highlights.forEach(h => h.remove());
 }
