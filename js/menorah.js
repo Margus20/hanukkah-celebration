@@ -1,13 +1,15 @@
-// ====== MENORÁ SVG ======
+// ====== MENORÁ SVG CON LLAMAS NATURALES Y CHISPAS ======
 
 const svg = document.getElementById('menorahSVG');
 const candlesGroup = document.getElementById('candles');
 const flamesGroup = document.getElementById('flames');
 const holdersGroup = document.getElementById('holders');
+const container = document.getElementById('menorahContainer');
 
 let isDragging = false;
 let dragFlame = null;
 let litCandles = new Set();
+let flameAnimations = []; // Para guardar los intervalos de las chispas y limpiarlos al reiniciar
 
 // Dibujar portavelas (bases doradas)
 function drawHolders() {
@@ -31,12 +33,10 @@ function drawCandles() {
     const isShamash = (i === 4);
     const isLit = litCandles.has(i);
     const length = isShamash ? SHAMASH_LENGTH : CANDLE_LENGTH;
-    // Si está encendida, se acorta un poco
     const consumed = isLit ? 15 : 0;
     const actualLength = length - consumed;
-    const topY = pos.y - actualLength; // parte superior de la vela
+    const topY = pos.y - actualLength;
     
-    // Vela (rectángulo hacia arriba desde la base)
     const candle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     candle.setAttribute('x', pos.x - 8);
     candle.setAttribute('y', topY);
@@ -48,7 +48,6 @@ function drawCandles() {
     candle.style.cursor = 'pointer';
     candlesGroup.appendChild(candle);
     
-    // Mecha (línea negra de 6px arriba de la vela)
     const wick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     wick.setAttribute('x1', pos.x);
     wick.setAttribute('y1', topY);
@@ -61,7 +60,7 @@ function drawCandles() {
   });
 }
 
-// Dibujar una llama en la punta de la mecha
+// Dibujar una llama con animación individual y chispas
 function drawFlame(pos, idx) {
   const isShamash = (idx === 4);
   const isLit = litCandles.has(idx);
@@ -69,7 +68,6 @@ function drawFlame(pos, idx) {
   const consumed = isLit ? 15 : 0;
   const actualLength = length - consumed;
   const topY = pos.y - actualLength;
-  // La llama va 10px arriba de la punta de la mecha
   const flameY = topY - 16;
   
   const flame = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
@@ -79,12 +77,70 @@ function drawFlame(pos, idx) {
   flame.setAttribute('ry', 18);
   flame.setAttribute('fill', 'url(#flameGrad)');
   flame.classList.add('flame-svg');
+  
+  // Animación individual con duración y retraso aleatorios para que no se sincronicen
+  const duration = 0.4 + Math.random() * 0.4; // entre 0.4s y 0.8s
+  const delay = Math.random() * 0.5;          // retraso aleatorio
+  flame.style.animation = `flickerNatural ${duration}s ${delay}s infinite alternate`;
+  
   flamesGroup.appendChild(flame);
+  
+  // Iniciar chispas esporádicas para esta llama
+  startSparks(pos, flameY, idx);
+  
   return flame;
+}
+
+// Sistema de chispas naturales
+function startSparks(pos, flameY, idx) {
+  const sparkInterval = setInterval(() => {
+    if (!litCandles.has(idx)) {
+      clearInterval(sparkInterval);
+      return;
+    }
+    if (Math.random() < 0.3) { // 30% de probabilidad de soltar una chispa
+      createSpark(pos, flameY);
+    }
+  }, 2000 + Math.random() * 3000); // cada 2 a 5 segundos
+  
+  flameAnimations.push(sparkInterval);
+}
+
+function createSpark(pos, flameY) {
+  const spark = document.createElement('div');
+  spark.classList.add('chispa');
+  const colors = ['#ffd700', '#ffeb3b', '#ff9800', '#ffffff'];
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  spark.style.background = color;
+  spark.style.boxShadow = `0 0 6px ${color}`;
+  
+  // Calcular posición absoluta relativa al contenedor de la menorá
+  const svgRect = svg.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect();
+  const offsetX = (pos.x / 700) * svgRect.width;
+  const offsetY = (flameY / 450) * svgRect.height;
+  
+  spark.style.left = (offsetX + svgRect.left - containerRect.left) + 'px';
+  spark.style.top = (offsetY + svgRect.top - containerRect.top) + 'px';
+  
+  const dx = (Math.random() - 0.5) * 30;
+  const dy = -(Math.random() * 40 + 20);
+  spark.style.setProperty('--dx', `${dx}px`);
+  spark.style.setProperty('--dy', `${dy}px`);
+  
+  const duration = 0.8 + Math.random() * 0.5;
+  spark.style.animation = `chispa-subir ${duration}s ease-out forwards`;
+  
+  container.appendChild(spark);
+  setTimeout(() => { if (spark.parentNode) spark.parentNode.removeChild(spark); }, duration * 1000);
 }
 
 // Inicializar
 function initMenorah() {
+  // Limpiar animaciones anteriores para evitar fugas de memoria
+  flameAnimations.forEach(interval => clearInterval(interval));
+  flameAnimations = [];
+  
   drawHolders();
   litCandles.clear();
   litCandles.add(4); // Shamash siempre encendido
@@ -95,6 +151,9 @@ function initMenorah() {
 
 // Actualizar después de encender/apagar
 function updateMenorah() {
+  flameAnimations.forEach(interval => clearInterval(interval));
+  flameAnimations = [];
+  
   drawCandles();
   flamesGroup.innerHTML = '';
   litCandles.forEach(i => drawFlame(WICK_POSITIONS[i], i));
@@ -127,6 +186,8 @@ function handleCandleTap(e) {
 
 // Reiniciar
 function resetCandles() {
+  flameAnimations.forEach(interval => clearInterval(interval));
+  flameAnimations = [];
   litCandles.clear();
   litCandles.add(4);
   updateMenorah();
