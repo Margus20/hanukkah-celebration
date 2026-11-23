@@ -42,6 +42,8 @@ function drawCandles() {
     candle.setAttribute('height', candleHeight);
     candle.setAttribute('fill', 'url(#candleGrad)');
     candle.setAttribute('rx', 2);
+    candle.setAttribute('data-idx', i);
+    candle.style.cursor = 'pointer';
     candlesGroup.appendChild(candle);
     
     // Mecha (línea negra pequeña arriba)
@@ -52,15 +54,24 @@ function drawCandles() {
     wick.setAttribute('y2', pos.y - candleHeight - 5);
     wick.setAttribute('stroke', '#333');
     wick.setAttribute('stroke-width', 2);
+    wick.setAttribute('data-idx', i);
     candlesGroup.appendChild(wick);
   });
 }
 
-// Dibujar una llama en una posición
-function drawFlame(pos) {
+// Dibujar una llama en la punta de la mecha
+function drawFlame(pos, idx) {
+  const isShamash = (idx === 4);
+  const isLit = litCandles.has(idx);
+  const height = isShamash ? SHAMASH_HEIGHT : CANDLE_HEIGHT;
+  const consumed = isLit ? 15 : 0;
+  const candleHeight = height - consumed;
+  // La llama va en la punta de la mecha
+  const flameY = pos.y - candleHeight - 10;
+  
   const flame = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
   flame.setAttribute('cx', pos.x);
-  flame.setAttribute('cy', pos.y - 15);
+  flame.setAttribute('cy', flameY);
   flame.setAttribute('rx', 10);
   flame.setAttribute('ry', 18);
   flame.setAttribute('fill', 'url(#flameGrad)');
@@ -76,14 +87,14 @@ function initMenorah() {
   litCandles.add(4); // Shamash siempre encendido
   drawCandles();
   flamesGroup.innerHTML = '';
-  drawFlame(WICK_POSITIONS[4]);
+  drawFlame(WICK_POSITIONS[4], 4);
 }
 
 // Actualizar visualización después de encender/apagar
 function updateMenorah() {
   drawCandles();
   flamesGroup.innerHTML = '';
-  litCandles.forEach(i => drawFlame(WICK_POSITIONS[i]));
+  litCandles.forEach(i => drawFlame(WICK_POSITIONS[i], i));
 }
 
 // Crear llama arrastrable (SVG temporal que sigue al dedo/mouse)
@@ -148,11 +159,11 @@ function endDrag(e) {
   
   // Buscar la mecha más cercana
   let closest = -1;
-  let minDist = 30; // distancia máxima para "atrapar" la mecha
+  let minDist = 40; // distancia máxima para "atrapar" la mecha
   WICK_POSITIONS.forEach((pos, i) => {
     if (i === 4) return; // no encender shamash de nuevo
     if (litCandles.has(i)) return; // ya encendida
-    const dist = Math.sqrt(Math.pow(svgPt.x - pos.x, 2) + Math.pow(svgPt.y - pos.y, 2));
+    const dist = Math.sqrt(Math.pow(svgPt.x - pos.x, 2) + Math.pow(svgPt.y - (pos.y - CANDLE_HEIGHT), 2));
     if (dist < minDist) {
       minDist = dist;
       closest = i;
@@ -172,8 +183,9 @@ function endDrag(e) {
   document.removeEventListener('touchend', endDrag);
 }
 
-// Encender una vela
+// Encender una vela directamente (por toque)
 function lightCandle(idx) {
+  if (litCandles.has(idx)) return; // ya encendida
   if (litCandles.size - 1 >= currentNight) { // -1 porque el shamash ya está
     alert('Ya encendiste las ' + currentNight + ' velas de esta noche 🕎');
     return;
@@ -185,6 +197,19 @@ function lightCandle(idx) {
       '¡Felicidades! Encendiste las ' + currentNight + ' velas de la noche ' + currentNight + ' de Janucá 🕎✨';
   }
   if (guideActive) { clearHighlight(); nextGuideStep(); }
+}
+
+// Manejar toque/click directo en una vela
+function handleCandleTap(e) {
+  const target = e.target;
+  const idx = parseInt(target.getAttribute('data-idx'));
+  if (isNaN(idx) || idx === 4) return; // no tocar shamash ni elementos sin data-idx
+  if (litCandles.has(idx)) return; // ya encendida
+  
+  // Verificar si estamos en modo arrastre
+  if (isDragging) return;
+  
+  lightCandle(idx);
 }
 
 // Reiniciar velas
@@ -217,13 +242,13 @@ async function autoLight() {
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-// Hacer el Shamash arrastrable
+// Eventos de arrastre desde el Shamash
 svg.addEventListener('mousedown', function(e) {
   const pt = svg.createSVGPoint();
   pt.x = e.clientX;
   pt.y = e.clientY;
   const svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
-  const dist = Math.sqrt(Math.pow(svgPt.x - WICK_POSITIONS[4].x, 2) + Math.pow(svgPt.y - WICK_POSITIONS[4].y, 2));
+  const dist = Math.sqrt(Math.pow(svgPt.x - WICK_POSITIONS[4].x, 2) + Math.pow(svgPt.y - (WICK_POSITIONS[4].y - SHAMASH_HEIGHT), 2));
   if (dist < 30) startDrag(e);
 });
 svg.addEventListener('touchstart', function(e) {
@@ -232,6 +257,32 @@ svg.addEventListener('touchstart', function(e) {
   pt.x = touch.clientX;
   pt.y = touch.clientY;
   const svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
-  const dist = Math.sqrt(Math.pow(svgPt.x - WICK_POSITIONS[4].x, 2) + Math.pow(svgPt.y - WICK_POSITIONS[4].y, 2));
+  const dist = Math.sqrt(Math.pow(svgPt.x - WICK_POSITIONS[4].x, 2) + Math.pow(svgPt.y - (WICK_POSITIONS[4].y - SHAMASH_HEIGHT), 2));
   if (dist < 30) startDrag(e);
 }, { passive: false });
+
+// Eventos de toque directo en velas
+candlesGroup.addEventListener('click', handleCandleTap);
+candlesGroup.addEventListener('touchend', function(e) {
+  const touch = e.changedTouches[0];
+  const pt = svg.createSVGPoint();
+  pt.x = touch.clientX;
+  pt.y = touch.clientY;
+  const svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
+  // Buscar la vela más cercana al toque
+  let closest = -1;
+  let minDist = 25;
+  WICK_POSITIONS.forEach((pos, i) => {
+    if (i === 4) return;
+    const candleTop = pos.y - CANDLE_HEIGHT;
+    const dist = Math.sqrt(Math.pow(svgPt.x - pos.x, 2) + Math.pow(svgPt.y - candleTop, 2));
+    if (dist < minDist) {
+      minDist = dist;
+      closest = i;
+    }
+  });
+  if (closest >= 0) {
+    const fakeEvent = { target: { getAttribute: () => closest } };
+    handleCandleTap(fakeEvent);
+  }
+});
