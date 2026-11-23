@@ -12,20 +12,23 @@ const NOCHES = [
   {y:2026,m:12,d:11}
 ];
 
-// Posiciones porcentuales (x, y) de las 8 velas + shamash
-// AJÚSTALAS si las velas en tus imágenes están en otras posiciones
-// Índices: 0-3 velas izquierda, 4 shamash, 5-8 velas derecha
-const POS = [
-  {x:14, y:62},   // vela 1 (extremo izquierdo)
-  {x:24, y:62},   // vela 2
-  {x:34, y:62},   // vela 3
-  {x:44, y:62},   // vela 4
-  {x:50, y:46},   // shamash (centro, más alto)
-  {x:56, y:62},   // vela 5
-  {x:66, y:62},   // vela 6
-  {x:76, y:62},   // vela 7
-  {x:86, y:62}    // vela 8 (extremo derecho)
+// Coordenadas SVG de las mechas (viewBox 700x450)
+// Orden: vela1, vela2, vela3, vela4, shamash, vela5, vela6, vela7, vela8
+const WICK_POSITIONS = [
+  {x:150, y:260},   // vela 1 (extremo izquierdo)
+  {x:200, y:250},   // vela 2
+  {x:250, y:240},   // vela 3
+  {x:290, y:230},   // vela 4
+  {x:350, y:180},   // shamash (centro, más alto)
+  {x:410, y:230},   // vela 5
+  {x:450, y:240},   // vela 6
+  {x:500, y:250},   // vela 7
+  {x:550, y:260}    // vela 8 (extremo derecho)
 ];
+
+// Altura de las velas (desde la mecha hacia abajo)
+const CANDLE_HEIGHT = 60;
+const SHAMASH_HEIGHT = 80;
 
 // Ciudades con coordenadas y zona horaria
 const CIUDADES = {
