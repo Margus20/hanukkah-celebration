@@ -32,7 +32,7 @@ h1 { font-size:1.6em; margin-bottom:8px; text-shadow:2px 2px 4px rgba(0,0,0,.5);
 select, .btn {
   background:rgba(255,215,0,.25); border:1px solid gold; color:#fff;
   padding:10px 14px; border-radius:8px; font-size:0.9em; cursor:pointer;
-  min-height:44px; /* tamaño mínimo táctil */
+  min-height:44px;
   -webkit-tap-highlight-color: transparent;
 }
 select { max-width:100%; }
@@ -56,20 +56,60 @@ select option { color:#000; }
 /* ====== MENORÁ SVG ====== */
 .menorah-container {
   position:relative; width:100%; max-width:720px; margin:14px auto;
-  background:rgba(0,0,0,.35); border-radius:16px; overflow:hidden;
+  background:rgba(0,0,0,.35); border-radius:16px; overflow:visible;
   aspect-ratio: 700 / 450;
 }
 .menorah-container svg { width:100%; height:100%; display:block; }
-#shamashFlame { display:none; } /* usamos llamas SVG */
 
-/* ====== LLAMAS SVG ====== */
+/* ====== LLAMAS SVG CON ANIMACIÓN INDIVIDUAL ====== */
 .flame-svg {
-  animation: flickerSvg .5s infinite alternate;
   transform-origin: center bottom;
+  /* La animación se asigna dinámicamente con JS para que cada llama tenga su propio ritmo */
 }
-@keyframes flickerSvg {
-  0% { transform: translateY(0) scale(1, 1) rotate(-2deg); opacity:.9; }
-  100% { transform: translateY(-2px) scale(.95, 1.05) rotate(2deg); opacity:1; }
+
+/* Animación natural de llama (se aplica con JS con duración y delay aleatorios) */
+@keyframes flickerNatural {
+  0% {
+    transform: translateY(0) scale(1, 1) rotate(-2deg);
+    opacity: 0.85;
+  }
+  25% {
+    transform: translateY(-1px) scale(1.02, 0.98) rotate(1deg);
+    opacity: 0.95;
+  }
+  50% {
+    transform: translateY(-2px) scale(0.97, 1.04) rotate(-1deg);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(-1px) scale(1.01, 0.99) rotate(2deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(0) scale(0.98, 1.02) rotate(-2deg);
+    opacity: 0.88;
+  }
+}
+
+/* ====== CHISPAS ESPORÁDICAS ====== */
+.chispa {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+@keyframes chispa-subir {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), var(--dy)) scale(0);
+    opacity: 0;
+  }
 }
 
 /* ====== GUÍA Y PANELES ====== */
