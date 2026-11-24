@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Janucá - Festival de las Luces</title>
+<!-- Fuentes modernas: Inter para la interfaz, Playfair Display para títulos y hebreo -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -29,18 +33,18 @@
       <option value="jerusalen">Israel - Jerusalem</option>
       <option value="custom">📍 Usar mi ubicación (GPS)</option>
     </select>
-    <label style="margin-left:8px;">Modo: </label>
+    <label>Modo: </label>
     <select id="modeSelect" onchange="recompute()">
-      <option value="diáspora">Diáspora (18 min viernes)</option>
-      <option value="israel">Israel (40 min viernes)</option>
+      <option value="diáspora">Diáspora (18 min)</option>
+      <option value="israel">Israel (40 min)</option>
     </select>
   </div>
 
   <div class="controls">
-    <button class="btn" id="demoBtn" onclick="toggleDemo()">🎓 Modo demostración</button>
-    <button class="btn" onclick="startGuide()">📖 Guía paso a paso</button>
-    <button class="btn" id="autoBtn" onclick="autoLight()">🔥 Encender automático</button>
-    <button class="btn" onclick="resetCandles()">🔄 Reiniciar</button>
+    <button class="btn btn-primary" id="autoBtn" onclick="autoLight()">🔥 Encender automático</button>
+    <button class="btn btn-ghost" id="demoBtn" onclick="toggleDemo()">🎓 Demo</button>
+    <button class="btn btn-ghost" onclick="startGuide()">📖 Guía</button>
+    <button class="btn btn-ghost" onclick="resetCandles()">🔄 Reiniciar</button>
   </div>
 
   <div class="day-tabs" id="dayTabs"></div>
@@ -51,51 +55,70 @@
     <svg id="menorahSVG" viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#ffd700"/>
-          <stop offset="50%" style="stop-color:#daa520"/>
-          <stop offset="100%" style="stop-color:#b8860b"/>
+          <stop offset="0%" style="stop-color:#e8c547"/>
+          <stop offset="50%" style="stop-color:#c9a227"/>
+          <stop offset="100%" style="stop-color:#8b6914"/>
         </linearGradient>
         <linearGradient id="candleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#fff"/>
-          <stop offset="100%" style="stop-color:#f0f0f0"/>
+          <stop offset="0%" style="stop-color:#fafafa"/>
+          <stop offset="100%" style="stop-color:#e0e0e0"/>
         </linearGradient>
         <radialGradient id="flameGrad">
           <stop offset="0%" style="stop-color:#fff"/>
-          <stop offset="30%" style="stop-color:#ffeb3b"/>
-          <stop offset="70%" style="stop-color:#ff9800"/>
-          <stop offset="100%" style="stop-color:#ff5722;stop-opacity:0"/>
+          <stop offset="30%" style="stop-color:#ffe066"/>
+          <stop offset="70%" style="stop-color:#ff9f43"/>
+          <stop offset="100%" style="stop-color:#ff6b35;stop-opacity:0"/>
+        </radialGradient>
+        <!-- Resplandor suave detrás de las llamas para mayor vistosidad -->
+        <radialGradient id="glowGrad">
+          <stop offset="0%" style="stop-color:rgba(255,200,100,0.25)"/>
+          <stop offset="60%" style="stop-color:rgba(255,200,100,0.05)"/>
+          <stop offset="100%" style="stop-color:rgba(255,200,100,0)"/>
         </radialGradient>
       </defs>
       
+      <!-- Resplandor de fondo -->
+      <ellipse id="glowBg" cx="350" cy="260" rx="280" ry="150" fill="url(#glowGrad)" opacity="0.6"/>
+      
       <!-- Base del candelabro -->
-      <ellipse cx="350" cy="420" rx="120" ry="15" fill="url(#goldGrad)"/>
-      <rect x="330" y="380" width="40" height="40" fill="url(#goldGrad)"/>
+      <ellipse cx="350" cy="420" rx="110" ry="12" fill="url(#goldGrad)"/>
+      <rect x="332" y="385" width="36" height="35" fill="url(#goldGrad)" rx="3"/>
       
       <!-- Tronco central -->
-      <rect x="345" y="290" width="10" height="130" fill="url(#goldGrad)"/>
+      <rect x="346" y="295" width="8" height="125" fill="url(#goldGrad)"/>
       
-      <!-- Brazos que nacen del tronco y suben en arco hasta cada vela (Curvas C para conexión suave) -->
-      <path d="M 350 400 C 260 400, 150 380, 150 330" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 350 385 C 280 385, 200 365, 200 320" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 350 370 C 300 370, 250 355, 250 310" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 350 360 C 320 360, 290 345, 290 300" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 350 360 C 380 360, 410 345, 410 300" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 350 370 C 400 370, 450 355, 450 310" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 350 385 C 420 385, 500 365, 500 320" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
-      <path d="M 350 400 C 440 400, 550 380, 550 330" stroke="url(#goldGrad)" stroke-width="8" fill="none"/>
+      <!-- Brazos que nacen del tronco y suben en arco -->
+      <path d="M 350 400 C 260 400, 150 380, 150 330" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M 350 385 C 280 385, 200 365, 200 320" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M 350 370 C 300 370, 250 355, 250 310" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M 350 360 C 320 360, 290 345, 290 300" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M 350 360 C 380 360, 410 345, 410 300" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M 350 370 C 400 370, 450 355, 450 310" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M 350 385 C 420 385, 500 365, 500 320" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M 350 400 C 440 400, 550 380, 550 330" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
       
-      <!-- Portavelas, Velas y Llamas (se generan con JS) -->
       <g id="holders"></g>
       <g id="candles"></g>
       <g id="flames"></g>
     </svg>
   </div>
+  <p class="menorah-tip">Toca cualquier vela para encenderla</p>
 
   <div class="panel">
     <h2>Bendiciones del encendido</h2>
-    <div class="blessing"><div class="heb">בָּרוּךְ אַתָּה ה' אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ לְהַדְלִיק נֵר שֶׁל חֲנֻכָּה</div>Baruj Atá Adonai... que nos santificó con Sus mandamientos y nos ordenó encender la vela de Janucá.</div>
-    <div class="blessing"><div class="heb">שֶׁעָשָׂה נִסִּים לַאֲבוֹתֵינוּ בַּיָּמִים הָהֵם בַּזְּמַן הַזֶּה</div>She asá nisim la avotenu... que hizo milagros a nuestros padres en aquellos días, en esta época.</div>
-    <div class="blessing" id="shehejeianu"><div class="heb">שֶׁהֶחֱיָנוּ וְקִיְּמָנוּ וְהִגִּיעָנוּ לַזְּמַן הַזֶּה</div>Shehejeianu... que nos dio vida y nos hizo llegar a este momento. <em>(solo la primera noche)</em></div>
+    <div class="blessing">
+      <div class="heb">בָּרוּךְ אַתָּה ה' אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ לְהַדְלִיק נֵר שֶׁל חֲנֻכָּה</div>
+      <div class="translation">Baruj Atá Adonai... que nos santificó con Sus mandamientos y nos ordenó encender la vela de Janucá.</div>
+    </div>
+    <div class="blessing">
+      <div class="heb">שֶׁעָשָׂה נִסִּים לַאֲבוֹתֵינוּ בַּיָּמִים הָהֵם בַּזְּמַן הַזֶּה</div>
+      <div class="translation">She asá nisim la avotenu... que hizo milagros a nuestros padres en aquellos días, en esta época.</div>
+    </div>
+    <div class="blessing" id="shehejeianu">
+      <span class="tag">Solo Noche 1</span>
+      <div class="heb">שֶׁהֶחֱיָנוּ וְקִיְּמָנוּ וְהִגִּיעָנוּ לַזְּמַן הַזֶּה</div>
+      <div class="translation">Shehejeianu... que nos dio vida y nos hizo llegar a este momento.</div>
+    </div>
   </div>
 
   <div class="panel">
@@ -104,12 +127,9 @@
     <p>Se enciende una vela más cada noche (8 en total) más el Shamash, la vela piloto que se enciende primero y se usa para encender las demás.</p>
     <p>La hora es al anochecer (unos 30 min tras el atardecer); en viernes se enciende antes del atardecer (18 min, o 40 en Israel) por Shabat, y en sábado después de la salida de Shabat.</p>
     <p>Orden: enciende el Shamash, di las bendiciones, y enciende la vela nueva primero, de izquierda a derecha.</p>
-    <p class="note">El candelabro está dibujado con código, así que las llamas siempre caen en las mechas.</p>
-    <p class="note">💡 <strong>Tip:</strong> Toca directamente cualquier vela para encenderla, o usa el botón "Encender automático".</p>
   </div>
 </div>
 
-<!-- Cuadro de aviso personalizado (Toast) -->
 <div id="toast" class="toast"></div>
 
 <script src="js/data.js"></script>
