@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+
+<!-- 1. BOTÓN FIJO DE DONAR (arriba a la izquierda) -->
+<button class="donate-fab" onclick="openDonateModal()">🕎 Donar</button>
+
 <div class="container">
   <h1>🕎 Janucá - Festival de las Luces</h1>
   <div class="big-date" id="bigDate">Janucá 2026 comienza el viernes 4 de diciembre</div>
@@ -69,7 +73,6 @@
           <stop offset="70%" style="stop-color:#ff9f43"/>
           <stop offset="100%" style="stop-color:#ff6b35;stop-opacity:0"/>
         </radialGradient>
-        <!-- Resplandor suave detrás de las llamas para mayor vistosidad -->
         <radialGradient id="glowGrad">
           <stop offset="0%" style="stop-color:rgba(255,200,100,0.25)"/>
           <stop offset="60%" style="stop-color:rgba(255,200,100,0.05)"/>
@@ -77,17 +80,10 @@
         </radialGradient>
       </defs>
       
-      <!-- Resplandor de fondo -->
       <ellipse id="glowBg" cx="350" cy="260" rx="280" ry="150" fill="url(#glowGrad)" opacity="0.6"/>
-      
-      <!-- Base del candelabro -->
       <ellipse cx="350" cy="420" rx="110" ry="12" fill="url(#goldGrad)"/>
       <rect x="332" y="385" width="36" height="35" fill="url(#goldGrad)" rx="3"/>
-      
-      <!-- Tronco central -->
       <rect x="346" y="295" width="8" height="125" fill="url(#goldGrad)"/>
-      
-      <!-- Brazos que nacen del tronco y suben en arco -->
       <path d="M 350 400 C 260 400, 150 380, 150 330" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
       <path d="M 350 385 C 280 385, 200 365, 200 320" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
       <path d="M 350 370 C 300 370, 250 355, 250 310" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
@@ -131,6 +127,29 @@
 </div>
 
 <div id="toast" class="toast"></div>
+
+<!-- 2. VENTANA EMERGENTE (MODAL) DE DONACIÓN -->
+<div id="donateModal" class="modal-overlay" onclick="closeDonateModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeDonateModal()">&times;</button>
+    <h3>Tzedaká · Apoyar este proyecto</h3>
+    <p>Tu contribución voluntaria ayuda a mantener y mejorar esta herramienta educativa y espiritual.</p>
+
+    <div class="donate-method">
+      <h4>💳 PayPal</h4>
+      <p>Envía tu donación al correo:</p>
+      <code class="wallet-address" id="paypalEmail">marcosgustavoyhvh@gmail.com</code>
+      <button class="btn btn-primary btn-sm" onclick="copyPayPal()">📋 Copiar correo</button>
+    </div>
+
+    <div class="donate-method">
+      <h4>🪙 Binance Pay (QR)</h4>
+      <p>Escanea con la app de Binance para pagar:</p>
+      <img class="qr-img" src="https://raw.githubusercontent.com/Margus20/decoracion-navidad/main/img/binance_pay_qr.png" alt="QR Binance Pay">
+      <p class="note">Red: BNB Smart Chain (BEP20) · USDT o BNB</p>
+    </div>
+  </div>
+</div>
 
 <script src="js/data.js"></script>
 <script src="js/sunset.js"></script>
