@@ -13,3 +13,32 @@ window.addEventListener('resize', function() {
 
 // Revisar cada minuto si ya es hora de encender
 setInterval(recompute, 60000);
+
+
+// ====== MODAL DE DONACIÓN (TZEDAKÁ) ======
+
+function openDonateModal() {
+  document.getElementById('donateModal').classList.add('show');
+}
+
+function closeDonateModal(event) {
+  // Cierra si se hace clic en el fondo oscuro o en la X
+  if (!event || event.target.id === 'donateModal' || event.target.classList.contains('modal-close')) {
+    document.getElementById('donateModal').classList.remove('show');
+  }
+}
+
+function copyPayPal() {
+  const email = 'marcosgustavoyhvh@gmail.com';
+  
+  // Intenta copiar al portapapeles
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(email).then(() => {
+      showToast('Correo de PayPal copiado al portapapeles 📋', 'success');
+    }).catch(() => {
+      showToast('Por favor, copia manualmente: ' + email, 'warning');
+    });
+  } else {
+    showToast('Por favor, copia manualmente: ' + email, 'warning');
+  }
+}
