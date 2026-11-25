@@ -27,18 +27,3 @@ function closeDonateModal(event) {
     document.getElementById('donateModal').classList.remove('show');
   }
 }
-
-function copyPayPal() {
-  const email = 'marcosgustavoyhvh@gmail.com';
-  
-  // Intenta copiar al portapapeles
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(email).then(() => {
-      showToast('Correo de PayPal copiado al portapapeles 📋', 'success');
-    }).catch(() => {
-      showToast('Por favor, copia manualmente: ' + email, 'warning');
-    });
-  } else {
-    showToast('Por favor, copia manualmente: ' + email, 'warning');
-  }
-}
