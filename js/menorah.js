@@ -1,4 +1,4 @@
-// ====== MENORÁ SVG CON LLAMAS NATURALES, CHISPAS Y TOAST ======
+// ====== MENORÁ SVG CON LLAMAS NATURALES, CHISPAS Y TOAST BILINGÜE ======
 
 const svg = document.getElementById('menorahSVG');
 const candlesGroup = document.getElementById('candles');
@@ -11,11 +11,11 @@ let dragFlame = null;
 let litCandles = new Set();
 let flameAnimations = [];
 
-// ====== TOAST PERSONALIZADO (reemplaza al alert del navegador) ======
+// ====== TOAST PERSONALIZADO ======
 let toastTimer = null;
 function showToast(msg, tipo) {
   const t = document.getElementById('toast');
-  if (!t) { alert(msg); return; } // respaldo si el div no existe
+  if (!t) { alert(msg); return; }
   const icono = tipo === 'success' ? '🕎✨' : tipo === 'warning' ? '⚠️' : '🕎';
   t.innerHTML = '<span class="toast-icon">' + icono + '</span>' + msg;
   t.className = 'toast show' + (tipo ? ' ' + tipo : '');
@@ -72,7 +72,7 @@ function drawCandles() {
   });
 }
 
-// Dibujar una llama con animación SUTIL (no se despega de la mecha)
+// Dibujar una llama con animación SUTIL
 function drawFlame(pos, idx) {
   const isShamash = (idx === 4);
   const isLit = litCandles.has(idx);
@@ -90,8 +90,6 @@ function drawFlame(pos, idx) {
   flame.setAttribute('fill', 'url(#flameGrad)');
   flame.classList.add('flame-svg');
 
-  // AJUSTE 1: ciclo más lento (0.8 a 1.4 s) para que la llama respire
-  // suave en vez de agitarse desorbitadamente
   const duration = 0.8 + Math.random() * 0.6;
   const delay = Math.random() * 0.6;
   flame.style.animation = `flickerNatural ${duration}s ${delay}s infinite alternate`;
@@ -101,12 +99,12 @@ function drawFlame(pos, idx) {
   return flame;
 }
 
-// Chispas esporádicas (AJUSTE 2: menos frecuentes y más suaves)
+// Chispas esporádicas
 function startSparks(pos, flameY, idx) {
   const sparkInterval = setInterval(() => {
     if (!litCandles.has(idx)) { clearInterval(sparkInterval); return; }
     if (Math.random() < 0.25) createSpark(pos, flameY);
-  }, 2500 + Math.random() * 3500); // cada 2.5 a 6 segundos
+  }, 2500 + Math.random() * 3500);
   flameAnimations.push(sparkInterval);
 }
 
@@ -123,7 +121,6 @@ function createSpark(pos, flameY) {
   const offsetY = (flameY / 450) * svgRect.height;
   spark.style.left = (offsetX + svgRect.left - containerRect.left) + 'px';
   spark.style.top = (offsetY + svgRect.top - containerRect.top) + 'px';
-  // Trayectoria corta: sube poco y se desvía poco, como chispa real
   const dx = (Math.random() - 0.5) * 24;
   const dy = -(Math.random() * 36 + 18);
   spark.style.setProperty('--dx', `${dx}px`);
@@ -155,17 +152,17 @@ function updateMenorah() {
   litCandles.forEach(i => drawFlame(WICK_POSITIONS[i], i));
 }
 
-// Encender una vela (AJUSTE 3: usa showToast en lugar de alert)
+// Encender una vela (AHORA USA t() PARA SER BILINGÜE)
 function lightCandle(idx) {
   if (litCandles.has(idx)) return;
   if (litCandles.size - 1 >= currentNight) {
-    showToast('Ya encendiste las ' + currentNight + ' velas de esta noche', 'warning');
+    showToast(t('toast_max_candles'), 'warning');
     return;
   }
   litCandles.add(idx);
   updateMenorah();
   if (litCandles.size - 1 >= currentNight) {
-    showToast('¡Felicidades! Encendiste las ' + currentNight + ' velas de la noche ' + currentNight + ' de Janucá', 'success');
+    showToast(t('toast_success'), 'success');
   }
   if (guideActive) { clearHighlight(); nextGuideStep(); }
 }
@@ -194,16 +191,20 @@ async function autoLight() {
   resetCandles();
   const order = candleOrderForNight(currentNight);
   document.getElementById('autoBtn').disabled = true;
-  document.getElementById('guideBox').textContent = 'Modo automático: encendiendo...';
+  document.getElementById('guideBox').textContent = currentLang === 'en' ? 'Auto mode: lighting...' : 'Modo automático: encendiendo...';
   for (let i = 0; i < order.length; i++) {
-    document.getElementById('guideBox').textContent =
-      'Automático: encendiendo vela ' + (i + 1) + ' de ' + order.length + '...';
+    const msg = currentLang === 'en' 
+      ? `Auto: lighting candle ${i + 1} of ${order.length}...` 
+      : `Automático: encendiendo vela ${i + 1} de ${order.length}...`;
+    document.getElementById('guideBox').textContent = msg;
     await sleep(500);
     lightCandle(order[i]);
     await sleep(400);
   }
-  document.getElementById('guideBox').textContent =
-    '¡Automático completado! Noche ' + currentNight + ' encendida 🕎';
+  const finalMsg = currentLang === 'en' 
+    ? `✅ Auto complete! Night ${currentNight} lit 🕎` 
+    : `✅ ¡Automático completado! Noche ${currentNight} encendida 🕎`;
+  document.getElementById('guideBox').textContent = finalMsg;
   document.getElementById('autoBtn').disabled = false;
 }
 
