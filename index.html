@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Janucá - Festival de las Luces</title>
-<!-- Fuentes modernas: Inter para la interfaz, Playfair Display para títulos y hebreo -->
+<title data-i18n="title">Janucá - Festival de las Luces</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -12,19 +11,19 @@
 </head>
 <body>
 
-<!-- 1. BOTÓN FIJO DE DONAR (arriba a la izquierda) -->
-<button class="donate-fab" onclick="openDonateModal()">🕎 Donar</button>
+<button class="donate-fab" onclick="openDonateModal()">🕎 <span data-i18n="donate_btn">Donar</span></button>
 
 <div class="container">
-  <h1>🕎 Janucá - Festival de las Luces</h1>
-  <div class="big-date" id="bigDate">Janucá 2026 comienza el viernes 4 de diciembre</div>
-  <div class="countdown" id="countdown">Calculando...</div>
-  <div class="status-bar" id="statusBar">Espera...</div>
+  <h1 data-i18n="title">🕎 Janucá - Festival de las Luces</h1>
+  <div class="big-date" id="bigDate" data-i18n="bigDate">Janucá 2026 comienza el viernes 4 de diciembre</div>
+  <div class="countdown" id="countdown" data-i18n="countdown_default">Calculando...</div>
+  <div class="status-bar" id="statusBar" data-i18n="status_wait">Espera...</div>
 
   <div class="location">
-    <label>País / Ciudad: </label>
+    <label data-i18n="city_label">País / Ciudad: </label>
     <select id="citySelect" onchange="onCityChange()">
       <option value="caracas">Venezuela - Caracas</option>
+      <option value="cumana">Venezuela - Cumaná</option>
       <option value="maracaibo">Venezuela - Maracaibo</option>
       <option value="valencia">Venezuela - Valencia</option>
       <option value="bogota">Colombia - Bogotá</option>
@@ -35,9 +34,15 @@
       <option value="madrid">España - Madrid</option>
       <option value="nyc">EE.UU. - Nueva York</option>
       <option value="jerusalen">Israel - Jerusalem</option>
-      <option value="custom">📍 Usar mi ubicación (GPS)</option>
+      <option value="custom">📍 GPS</option>
     </select>
-    <label>Modo: </label>
+    
+    <div class="lang-toggle">
+      <button id="btn-es" class="lang-btn" onclick="setLanguage('es')" title="Español">🇪🇸</button>
+      <button id="btn-en" class="lang-btn" onclick="setLanguage('en')" title="English">🇬🇧</button>
+    </div>
+
+    <label data-i18n="mode_label">Modo: </label>
     <select id="modeSelect" onchange="recompute()">
       <option value="diáspora">Diáspora (18 min)</option>
       <option value="israel">Israel (40 min)</option>
@@ -45,41 +50,31 @@
   </div>
 
   <div class="controls">
-    <button class="btn btn-primary" id="autoBtn" onclick="autoLight()">🔥 Encender automático</button>
-    <button class="btn btn-ghost" id="demoBtn" onclick="toggleDemo()">🎓 Demo</button>
-    <button class="btn btn-ghost" onclick="startGuide()">📖 Guía</button>
-    <button class="btn btn-ghost" onclick="resetCandles()">🔄 Reiniciar</button>
+    <button class="btn btn-primary" id="autoBtn" onclick="autoLight()" data-i18n="btn_auto">🔥 Encender automático</button>
+    <button class="btn btn-ghost" id="demoBtn" onclick="toggleDemo()" data-i18n="btn_demo">🎓 Demo</button>
+    <button class="btn btn-ghost" onclick="startGuide()" data-i18n="btn_guide">📖 Guía</button>
+    <button class="btn btn-ghost" onclick="resetCandles()" data-i18n="btn_reset">🔄 Reiniciar</button>
   </div>
 
   <div class="day-tabs" id="dayTabs"></div>
-
-  <div id="guideBox">Selecciona un día o usa la guía para aprender a encender las velas.</div>
+  <div id="guideBox" data-i18n="guide_default">Selecciona un día o usa la guía para aprender a encender las velas.</div>
 
   <div class="menorah-container" id="menorahContainer">
     <svg id="menorahSVG" viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#e8c547"/>
-          <stop offset="50%" style="stop-color:#c9a227"/>
-          <stop offset="100%" style="stop-color:#8b6914"/>
+          <stop offset="0%" style="stop-color:#e8c547"/><stop offset="50%" style="stop-color:#c9a227"/><stop offset="100%" style="stop-color:#8b6914"/>
         </linearGradient>
         <linearGradient id="candleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style="stop-color:#fafafa"/>
-          <stop offset="100%" style="stop-color:#e0e0e0"/>
+          <stop offset="0%" style="stop-color:#fafafa"/><stop offset="100%" style="stop-color:#e0e0e0"/>
         </linearGradient>
         <radialGradient id="flameGrad">
-          <stop offset="0%" style="stop-color:#fff"/>
-          <stop offset="30%" style="stop-color:#ffe066"/>
-          <stop offset="70%" style="stop-color:#ff9f43"/>
-          <stop offset="100%" style="stop-color:#ff6b35;stop-opacity:0"/>
+          <stop offset="0%" style="stop-color:#fff"/><stop offset="30%" style="stop-color:#ffe066"/><stop offset="70%" style="stop-color:#ff9f43"/><stop offset="100%" style="stop-color:#ff6b35;stop-opacity:0"/>
         </radialGradient>
         <radialGradient id="glowGrad">
-          <stop offset="0%" style="stop-color:rgba(255,200,100,0.25)"/>
-          <stop offset="60%" style="stop-color:rgba(255,200,100,0.05)"/>
-          <stop offset="100%" style="stop-color:rgba(255,200,100,0)"/>
+          <stop offset="0%" style="stop-color:rgba(255,200,100,0.25)"/><stop offset="60%" style="stop-color:rgba(255,200,100,0.05)"/><stop offset="100%" style="stop-color:rgba(255,200,100,0)"/>
         </radialGradient>
       </defs>
-      
       <ellipse id="glowBg" cx="350" cy="260" rx="280" ry="150" fill="url(#glowGrad)" opacity="0.6"/>
       <ellipse cx="350" cy="420" rx="110" ry="12" fill="url(#goldGrad)"/>
       <rect x="332" y="385" width="36" height="35" fill="url(#goldGrad)" rx="3"/>
@@ -92,66 +87,59 @@
       <path d="M 350 370 C 400 370, 450 355, 450 310" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
       <path d="M 350 385 C 420 385, 500 365, 500 320" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
       <path d="M 350 400 C 440 400, 550 380, 550 330" stroke="url(#goldGrad)" stroke-width="7" fill="none" stroke-linecap="round"/>
-      
-      <g id="holders"></g>
-      <g id="candles"></g>
-      <g id="flames"></g>
+      <g id="holders"></g><g id="candles"></g><g id="flames"></g>
     </svg>
   </div>
-  <p class="menorah-tip">Toca cualquier vela para encenderla</p>
+  <p class="menorah-tip" data-i18n="menorah_tip">Toca cualquier vela para encenderla</p>
 
   <div class="panel">
-    <h2>Bendiciones del encendido</h2>
+    <h2 data-i18n="blessings_title">Bendiciones del encendido</h2>
     <div class="blessing">
       <div class="heb">בָּרוּךְ אַתָּה ה' אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ לְהַדְלִיק נֵר שֶׁל חֲנֻכָּה</div>
-      <div class="translation">Baruj Atá Adonai... que nos santificó con Sus mandamientos y nos ordenó encender la vela de Janucá.</div>
+      <div class="translation" data-i18n="blessing1_trans">Baruj Atá Adonai... que nos santificó con Sus mandamientos y nos ordenó encender la vela de Janucá.</div>
     </div>
     <div class="blessing">
       <div class="heb">שֶׁעָשָׂה נִסִּים לַאֲבוֹתֵינוּ בַּיָּמִים הָהֵם בַּזְּמַן הַזֶּה</div>
-      <div class="translation">She asá nisim la avotenu... que hizo milagros a nuestros padres en aquellos días, en esta época.</div>
+      <div class="translation" data-i18n="blessing2_trans">She asá nisim la avotenu... que hizo milagros a nuestros padres en aquellos días, en esta época.</div>
     </div>
     <div class="blessing" id="shehejeianu">
-      <span class="tag">Solo Noche 1</span>
+      <span class="tag" data-i18n="tag_night1">Solo Noche 1</span>
       <div class="heb">שֶׁהֶחֱיָנוּ וְקִיְּמָנוּ וְהִגִּיעָנוּ לַזְּמַן הַזֶּה</div>
-      <div class="translation">Shehejeianu... que nos dio vida y nos hizo llegar a este momento.</div>
+      <div class="translation" data-i18n="blessing3_trans">Shehejeianu... que nos dio vida y nos hizo llegar a este momento.</div>
     </div>
   </div>
 
   <div class="panel">
-    <h2>Guía completa de Janucá</h2>
-    <p>Dura 8 noches, del 25 de Kislev. En 2026 va del atardecer del viernes 4 al anochecer del sábado 12 de diciembre.</p>
-    <p>Se enciende una vela más cada noche (8 en total) más el Shamash, la vela piloto que se enciende primero y se usa para encender las demás.</p>
-    <p>La hora es al anochecer (unos 30 min tras el atardecer); en viernes se enciende antes del atardecer (18 min, o 40 en Israel) por Shabat, y en sábado después de la salida de Shabat.</p>
-    <p>Orden: enciende el Shamash, di las bendiciones, y enciende la vela nueva primero, de izquierda a derecha.</p>
+    <h2 data-i18n="guide_panel_title">Guía completa de Janucá</h2>
+    <p data-i18n="guide_p1">Dura 8 noches, del 25 de Kislev. En 2026 va del atardecer del viernes 4 al anochecer del sábado 12 de diciembre.</p>
+    <p data-i18n="guide_p2">Se enciende una vela más cada noche (8 en total) más el Shamash, la vela piloto que se enciende primero y se usa para encender las demás.</p>
+    <p data-i18n="guide_p3">La hora es al anochecer (unos 30 min tras el atardecer); en viernes se enciende antes del atardecer (18 min, o 40 en Israel) por Shabat, y en sábado después de la salida de Shabat.</p>
+    <p data-i18n="guide_p4">Orden: enciende el Shamash, di las bendiciones, y enciende la vela nueva primero, de izquierda a derecha.</p>
   </div>
 </div>
 
 <div id="toast" class="toast"></div>
 
-<!-- 2. VENTANA EMERGENTE (MODAL) DE DONACIÓN ACTUALIZADA -->
 <div id="donateModal" class="modal-overlay" onclick="closeDonateModal(event)">
   <div class="modal-content" onclick="event.stopPropagation()">
     <button class="modal-close" onclick="closeDonateModal()">&times;</button>
-    <h3>Tzedaká · Apoyar este proyecto</h3>
-    <p>Tu contribución voluntaria ayuda a mantener y mejorar esta herramienta educativa y espiritual.</p>
-
+    <h3 data-i18n="donate_title">Tzedaká · Apoyar este proyecto</h3>
+    <p data-i18n="donate_desc">Tu contribución voluntaria ayuda a mantener y mejorar esta herramienta educativa y espiritual.</p>
     <div class="donate-method">
-      <h4>☕ Ko-fi</h4>
-      <p>Apoya este proyecto con una donación segura y voluntaria:</p>
-      <a href="https://ko-fi.com/mar_gus" target="_blank" class="btn btn-primary btn-sm" style="text-decoration: none; display: inline-block; width: auto; padding: 10px 24px; margin-top: 8px;">
-        ☕ Invítame un café en Ko-fi
-      </a>
+      <h4 data-i18n="kofi_title">☕ Ko-fi</h4>
+      <p data-i18n="kofi_desc">Apoya este proyecto con una donación segura y voluntaria:</p>
+      <a href="https://ko-fi.com/mar_gus" target="_blank" class="btn btn-primary btn-sm" style="text-decoration: none; display: inline-block; width: auto; padding: 10px 24px; margin-top: 8px;" data-i18n="kofi_btn">☕ Invítame un café en Ko-fi</a>
     </div>
-
     <div class="donate-method">
-      <h4>🪙 Binance Pay (QR)</h4>
-      <p>Escanea con la app de Binance para pagar:</p>
+      <h4 data-i18n="binance_title">🪙 Binance Pay (QR)</h4>
+      <p data-i18n="binance_desc">Escanea con la app de Binance para pagar:</p>
       <img class="qr-img" src="https://raw.githubusercontent.com/Margus20/decoracion-navidad/main/img/binance_pay_qr.png" alt="QR Binance Pay">
-      <p class="note">Red: BNB Smart Chain (BEP20) · USDT o BNB</p>
+      <p class="note" data-i18n="binance_note">Red: BNB Smart Chain (BEP20) · USDT o BNB</p>
     </div>
   </div>
 </div>
 
+<script src="js/lang.js"></script>
 <script src="js/data.js"></script>
 <script src="js/sunset.js"></script>
 <script src="js/state.js"></script>
