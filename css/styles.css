@@ -59,6 +59,37 @@ select option { color:#0a1628; background:#fff; }
 .btn-ghost:hover { background:rgba(255,255,255,.08); color: #e8eef7; }
 .btn-ghost.on { background:rgba(232,197,71,.15); color:#e8c547; border-color:rgba(232,197,71,.3); }
 
+/* ====== SELECTOR DE IDIOMA (BANDERAS) ====== */
+.lang-toggle {
+  display: flex;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 8px;
+}
+.lang-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 10px;
+  font-size: 1.4em; /* Tamaño perfecto para emojis de bandera */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lang-btn:hover { 
+  background: rgba(255,255,255,0.08); 
+  transform: scale(1.15); 
+}
+.lang-btn.active {
+  background: rgba(232,197,71,0.15);
+  border-radius: 6px;
+  box-shadow: 0 0 8px rgba(232,197,71,0.2);
+}
+
 /* ====== PESTAÑAS DE NOCHES ====== */
 .day-tabs { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin:12px 0; }
 .day-tabs button {
@@ -147,7 +178,7 @@ select option { color:#0a1628; background:#fff; }
 .blessing .heb { font-size:1.1em; direction:rtl; text-align:right; margin-bottom:8px; color: #f5e6b8; line-height: 1.6; }
 .blessing .translation { font-size: 0.85em; color: #8a9bb5; line-height: 1.5; }
 
-/* ====== NUEVO: BOTÓN FIJO DE DONAR (arriba izquierda) ====== */
+/* ====== BOTÓN FIJO DE DONAR ====== */
 .donate-fab {
   position: fixed; top: 12px; left: 12px; z-index: 900;
   background: rgba(19, 34, 64, 0.85);
@@ -161,7 +192,7 @@ select option { color:#0a1628; background:#fff; }
 }
 .donate-fab:hover { background: rgba(232, 197, 71, 0.15); transform: translateY(-1px); }
 
-/* ====== NUEVO: MODAL DE DONACIÓN (TZEDAKÁ) ====== */
+/* ====== MODAL DE DONACIÓN (TZEDAKÁ) ====== */
 .modal-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background: rgba(10, 22, 40, 0.85);
