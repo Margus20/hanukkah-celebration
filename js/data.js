@@ -25,17 +25,18 @@ const WICK_POSITIONS = [
 const CANDLE_LENGTH = 70;
 const SHAMASH_LENGTH = 110;
 
-// Ciudades
+// Ciudades con coordenadas y zona horaria
 const CIUDADES = {
-  caracas:{lat:10.49,lng:-66.90,tz:'America/Caracas'},
-  maracaibo:{lat:10.64,lng:-71.63,tz:'America/Caracas'},
-  valencia:{lat:10.16,lng:-68.00,tz:'America/Caracas'},
-  bogota:{lat:4.71,lng:-74.07,tz:'America/Bogota'},
-  lima:{lat:-12.05,lng:-77.04,tz:'America/Lima'},
-  buenosaires:{lat:-34.60,lng:-58.38,tz:'America/Argentina/Buenos_Aires'},
-  santiago:{lat:-33.45,lng:-70.66,tz:'America/Santiago'},
-  mexico:{lat:19.43,lng:-99.13,tz:'America/Mexico_City'},
-  madrid:{lat:40.42,lng:-3.70,tz:'Europe/Madrid'},
-  nyc:{lat:40.71,lng:-74.00,tz:'America/New_York'},
-  jerusalen:{lat:31.77,lng:35.21,tz:'Asia/Jerusalem'}
+  caracas:     {lat:10.49, lng:-66.90, tz:'America/Caracas'},
+  cumana:      {lat:10.46, lng:-64.18, tz:'America/Caracas'}, // <-- Cumaná, Estado Sucre agregada
+  maracaibo:   {lat:10.64, lng:-71.63, tz:'America/Caracas'},
+  valencia:    {lat:10.16, lng:-68.00, tz:'America/Caracas'},
+  bogota:      {lat:4.71,  lng:-74.07, tz:'America/Bogota'},
+  lima:        {lat:-12.05,lng:-77.04, tz:'America/Lima'},
+  buenosaires: {lat:-34.60,lng:-58.38, tz:'America/Argentina/Buenos_Aires'},
+  santiago:    {lat:-33.45,lng:-70.66, tz:'America/Santiago'},
+  mexico:      {lat:19.43, lng:-99.13, tz:'America/Mexico_City'},
+  madrid:      {lat:40.42, lng:-3.70,  tz:'Europe/Madrid'},
+  nyc:         {lat:40.71, lng:-74.00, tz:'America/New_York'},
+  jerusalen:   {lat:31.77, lng:35.21,  tz:'Asia/Jerusalem'}
 };
