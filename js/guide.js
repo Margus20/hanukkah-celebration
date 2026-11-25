@@ -1,4 +1,4 @@
-// ====== GUÍA PASO A PASO (toca la vela que brilla) ======
+// ====== GUÍA PASO A PASO (toca la vela que brilla) - BILINGÜE ======
 let guideActive = false;
 let guideStep = 0;
 
@@ -6,12 +6,12 @@ function startGuide() {
   // 1. Primero apagamos todo para empezar de cero.
   resetCandles();
   
-  // 2. DESPUÉS activamos la guía (antes se desactivaba por error).
+  // 2. DESPUÉS activamos la guía.
   guideActive = true;
   guideStep = 0;
   
   const g = document.getElementById('guideBox');
-  g.innerHTML = '📖 <strong>Guía iniciada.</strong> Te mostraré el orden correcto: primero el Shamash, luego las bendiciones y después las velas de una en una. <em>(Reiniciar solo apaga; la Guía además te enseña.)</em>';
+  g.innerHTML = t('guide_step1');
   
   // Pequeña pausa para que el usuario lea antes de que empiece el paso 1
   setTimeout(nextGuideStep, 1200);
@@ -22,15 +22,29 @@ function nextGuideStep() {
   const targetIdxs = candleOrderForNight(currentNight);
 
   if (guideStep === 0) {
-    g.innerHTML = '<strong>Paso 1:</strong> La vela piloto central (Shamash) ya está encendida. Es la fuente de fuego.';
+    g.innerHTML = t('guide_step2');
   } else if (guideStep === 1) {
-    g.innerHTML = '<strong>Paso 2:</strong> Recita las bendiciones (mira las tarjetas de abajo).';
+    g.innerHTML = t('guide_step3');
   } else if (guideStep - 2 < targetIdxs.length) {
     const i = guideStep - 2;
-    g.innerHTML = '<strong>Paso ' + (i + 3) + ':</strong> Toca la vela que brilla en dorado. La vela nueva siempre se enciende primero.';
+    const stepNum = i + 3;
+    
+    // Construimos el mensaje dinámico en el idioma actual
+    const prefix = currentLang === 'en' ? 'Step ' : 'Paso ';
+    const suffix = currentLang === 'en' 
+      ? ': Tap the candle glowing in gold. The newest candle is always lit first.' 
+      : ': Toca la vela que brilla en dorado. La vela nueva siempre se enciende primero.';
+    
+    g.innerHTML = '<strong>' + prefix + stepNum + '</strong>' + suffix;
     highlightCandle(targetIdxs[i]);
   } else {
-    g.innerHTML = '✅ ¡Listo! Encendiste las ' + currentNight + ' velas de la noche ' + currentNight + ' en el orden correcto. 🕎';
+    // Mensaje final con el número de noche
+    const nightNum = currentNight;
+    const msg = currentLang === 'en' 
+      ? '✅ Done! You lit the ' + nightNum + ' candles of night ' + nightNum + ' in the correct order. 🕎'
+      : '✅ ¡Listo! Encendiste las ' + nightNum + ' velas de la noche ' + nightNum + ' en el orden correcto. 🕎';
+    
+    g.innerHTML = msg;
     guideActive = false;
     clearHighlight();
   }
