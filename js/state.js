@@ -1,4 +1,4 @@
-// ====== ESTADO DE LA APLICACIÓN ======
+// ====== ESTADO DE LA APLICACIÓN - BILINGÜE ======
 let LOC = CIUDADES.caracas;
 let demoMode = false;
 let currentNight = 1;
@@ -18,16 +18,31 @@ function recompute() {
   const sb = document.getElementById('statusBar');
 
   if (active === 0) {
+    // Antes de Janucá: cuenta regresiva + aviso
     const ms = lightingTimes[0] - now;
-    cd.textContent = 'Faltan ' + fmtCount(ms) + ' para encender la primera vela';
+    const d = Math.floor(ms / 86400000);
+    const h = Math.floor(ms % 86400000 / 3600000);
+    const m = Math.floor(ms % 3600000 / 60000);
+    cd.textContent = tFormat('countdown_tpl', { d: d, h: h, m: m });
     sb.className = 'status-bar wait';
-    sb.textContent = '⏳ Aún no es Janucá. Primera vela: ' + fmtLocal(lightingTimes[0], LOC.tz);
+    const timeStr = fmtLocal(lightingTimes[0], LOC.tz);
+    sb.textContent = tFormat('status_first', { time: timeStr });
     if (!demoMode) { setNight(1, true); }
   } else if (active <= 8) {
+    // Durante Janucá: cuenta hacia la próxima vela o "última noche"
     const next = active < 8 ? lightingTimes[active] : null;
-    cd.textContent = next ? ('Próxima vela en ' + fmtCount(next - now)) : 'Última noche encendida';
+    if (next) {
+      const ms = next - now;
+      const d = Math.floor(ms / 86400000);
+      const h = Math.floor(ms % 86400000 / 3600000);
+      const m = Math.floor(ms % 3600000 / 60000);
+      cd.textContent = tFormat('countdown_next', { d: d, h: h, m: m });
+    } else {
+      cd.textContent = t('countdown_last');
+    }
     sb.className = 'status-bar ready';
-    sb.textContent = '🔥 ¡Es hora de encender! Noche ' + active + ' de Janucá (' + fmtLocal(lightingTimes[active - 1], LOC.tz) + ')';
+    const timeStr = fmtLocal(lightingTimes[active - 1], LOC.tz);
+    sb.textContent = tFormat('status_ready_night', { n: active, time: timeStr });
     if (!demoMode) { setNight(active, false); }
   }
   renderDayTabs(active);
@@ -38,6 +53,6 @@ function toggleDemo() {
   demoMode = !demoMode;
   const btn = document.getElementById('demoBtn');
   btn.classList.toggle('on', demoMode);
-  btn.textContent = demoMode ? '🎓 Demo: ACTIVADA' : '🎓 Modo demostración';
+  btn.textContent = demoMode ? t('demo_on') : t('demo_off');
   recompute();
 }
