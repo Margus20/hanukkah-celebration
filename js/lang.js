@@ -43,10 +43,10 @@ const translations = {
     guide_step3: "<strong>Paso 2:</strong> Recita las bendiciones (mira las tarjetas de abajo).",
     guide_step4: "<strong>Paso 3:</strong> Toca la vela que brilla en dorado. La vela nueva siempre se enciende primero.",
     guide_done: "✅ ¡Listo! Encendiste las velas en el orden correcto. 🕎",
-    // ===== NUEVAS CLAVES PARA TEXTOS DINÁMICOS =====
+    // ===== CLAVES PARA TEXTOS DINÁMICOS =====
     night_label: "Noche",
     status_locked: "🔒 Noche {n} bloqueada (no ha llegado la hora). Usa el Modo demostración para practicar.",
-    status_night: "Noche {n} de Janucá: debes encender {n} velas. Toca la vela que brilla o usa la guía/automático.",
+    status_night: "Noche {n} de Janucá: debes encender {n} vela{s}. Toca la vela que brilla o usa la guía/automático.",
     toast_locked: "Esa noche aún no ha llegado. Activa el Modo demostración.",
     countdown_tpl: "Faltan {d}d {h}h {m}m para encender la primera vela",
     status_first: "⌛ Aún no es Janucá. Primera vela: {date}, {time}.",
@@ -98,7 +98,7 @@ const translations = {
     // ===== NEW KEYS FOR DYNAMIC TEXTS =====
     night_label: "Night",
     status_locked: "🔒 Night {n} is locked (the time hasn't arrived). Use Demo mode to practice.",
-    status_night: "Hanukkah night {n}: you must light {n} candles. Tap the glowing candle or use the guide/auto.",
+    status_night: "Hanukkah night {n}: you must light {n} candle{s}. Tap the glowing candle or use the guide/auto.",
     toast_locked: "That night hasn't arrived yet. Enable Demo mode.",
     countdown_tpl: "{d}d {h}h {m}m until the first candle",
     status_first: "⌛ It's not Hanukkah yet. First candle: {date}, {time}.",
