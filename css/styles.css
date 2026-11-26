@@ -81,6 +81,25 @@ select option { color:#0a1628; background:#fff; }
 .chispa { position:absolute; width:4px; height:4px; border-radius:50%; pointer-events:none; z-index:100; }
 @keyframes chispa-subir { 0%{transform:translate(0,0) scale(1);opacity:1;} 100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0;} }
 
+/* ====== GOTAS DE CERA ANIMADAS ====== */
+.wax-drip {
+  animation: drip-fall 3s ease-in infinite;
+}
+@keyframes drip-fall {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.7;
+  }
+  70% {
+    transform: translateY(40px) scale(0.8, 1.2);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(80px) scale(0.3, 0.5);
+    opacity: 0;
+  }
+}
+
 /* ====== TOAST ====== */
 .toast { position:fixed; top:16px; left:50%; transform:translateX(-50%) translateY(-140%); max-width:90%; width:360px; background:#132240; border:1px solid rgba(232,197,71,.4); border-radius:12px; color:#e8eef7; font-family:'Inter','Georgia',serif; font-size:0.9em; padding:14px 18px; text-align:center; line-height:1.4; box-shadow:0 10px 30px rgba(0,0,0,.5); z-index:1000; opacity:0; pointer-events:none; transition:transform .4s cubic-bezier(.2,.9,.3,1.2), opacity .4s; }
 .toast.show { transform:translateX(-50%) translateY(0); opacity:1; pointer-events:auto; }
