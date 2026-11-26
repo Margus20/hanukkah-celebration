@@ -1,4 +1,4 @@
-// ====== CÁLCULO DEL ATARDECER (Algoritmo NOAA) ======
+// ====== CÁLCULO DEL ATARDECER (Algoritmo NOAA) - BILINGÜE ======
 
 // Calcula el día del año (1 a 366)
 function dayOfYear(d) {
@@ -42,27 +42,50 @@ function lightingTime(n) {
   const su = sunsetUTC(d, LOC.lat, LOC.lng);
   if (su === null) return null;
   const base = new Date(Date.UTC(d.y, d.m - 1, d.d, Math.floor(su), Math.round((su % 1) * 60)));
-  const wd = new Date(Date.UTC(d.y, d.m - 1, d.d)).getUTCDay(); // 0=dom...5=vie,6=sáb
+  const wd = new Date(Date.UTC(d.y, d.m - 1, d.d)).getUTCDay();
   const mode = document.getElementById('modeSelect').value;
   let offMin;
-  if (wd === 5) offMin = (mode === 'israel') ? -40 : -18;      // viernes: antes del atardecer
-  else if (wd === 6) offMin = 42;                             // sábado: tras salida de Shabat
-  else offMin = 30;                                           // resto: anochecer (tzeit)
+  if (wd === 5) offMin = (mode === 'israel') ? -40 : -18;
+  else if (wd === 6) offMin = 42;
+  else offMin = 30;
   return new Date(base.getTime() + offMin * 60000);
 }
 
-// Formatea una fecha en texto legible según la zona horaria
+// Formatea una fecha en texto legible según el idioma actual
 function fmtLocal(date, tz) {
-  return new Intl.DateTimeFormat('es-ES', {
+  const locale = currentLang === 'en' ? 'en-US' : 'es-ES';
+  return new Intl.DateTimeFormat(locale, {
     timeZone: tz, hour: '2-digit', minute: '2-digit',
     weekday: 'long', day: 'numeric', month: 'long', hour12: true
   }).format(date);
 }
 
-// Formatea una cuenta regresiva (días, horas, minutos)
+// Formatea solo los números de la cuenta regresiva (sin texto)
 function fmtCount(ms) {
   if (ms < 0) ms = 0;
   const s = Math.floor(ms / 1000);
   const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60);
   return (d ? d + 'd ' : '') + (h ? h + 'h ' : '') + m + 'm';
+}
+
+// ====== NUEVAS FUNCIONES BILINGÜES ======
+
+// Devuelve el texto completo de la cuenta regresiva traducido
+function fmtCountdown(ms) {
+  const nums = fmtCount(ms);
+  return tFormat('countdown_tpl', { d: Math.floor(ms / 86400000), h: Math.floor(ms % 86400000 / 3600000), m: Math.floor(ms % 3600000 / 60000) });
+}
+
+// Devuelve el mensaje de estado completo traducido
+function fmtStatusMessage(firstLightDate, tz) {
+  const formatted = fmtLocal(firstLightDate, tz);
+  const parts = formatted.split(', ');
+  const datePart = parts.slice(0, -1).join(', ');
+  const timePart = parts[parts.length - 1];
+  return tFormat('status_first', { date: datePart, time: timePart });
+}
+
+// Devuelve el mensaje de "Es hora" traducido
+function fmtReadyMessage() {
+  return t('status_ready_full');
 }
