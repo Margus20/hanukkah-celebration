@@ -43,14 +43,18 @@ const translations = {
     guide_step3: "<strong>Paso 2:</strong> Recita las bendiciones (mira las tarjetas de abajo).",
     guide_step4: "<strong>Paso 3:</strong> Toca la vela que brilla en dorado. La vela nueva siempre se enciende primero.",
     guide_done: "✅ ¡Listo! Encendiste las velas en el orden correcto. 🕎",
-    // ===== CLAVES PARA TEXTOS DINÁMICOS =====
     night_label: "Noche",
     status_locked: "🔒 Noche {n} bloqueada (no ha llegado la hora). Usa el Modo demostración para practicar.",
     status_night: "Noche {n} de Janucá: debes encender {n} vela{s}. Toca la vela que brilla o usa la guía/automático.",
     toast_locked: "Esa noche aún no ha llegado. Activa el Modo demostración.",
     countdown_tpl: "Faltan {d}d {h}h {m}m para encender la primera vela",
-    status_first: "⌛ Aún no es Janucá. Primera vela: {date}, {time}.",
-    status_ready_full: "🕎 ¡Es hora de encender las velas!"
+    countdown_next: "Próxima vela en {d}d {h}h {m}m",
+    countdown_last: "Última noche encendida",
+    status_first: "⌛ Aún no es Janucá. Primera vela: {time}",
+    status_ready_night: "🔥 ¡Es hora de encender! Noche {n} de Janucá ({time})",
+    status_ready_full: "🕎 ¡Es hora de encender las velas!",
+    demo_on: "🎓 Demo: ACTIVADA",
+    demo_off: "🎓 Modo demostración"
   },
   en: {
     title: "Hanukkah - Festival of Lights",
@@ -95,14 +99,18 @@ const translations = {
     guide_step3: "<strong>Step 2:</strong> Recite the blessings (see the cards below).",
     guide_step4: "<strong>Step 3:</strong> Tap the candle glowing in gold. The newest candle is always lit first.",
     guide_done: "✅ Done! You lit the candles in the correct order. 🕎",
-    // ===== NEW KEYS FOR DYNAMIC TEXTS =====
     night_label: "Night",
     status_locked: "🔒 Night {n} is locked (the time hasn't arrived). Use Demo mode to practice.",
     status_night: "Hanukkah night {n}: you must light {n} candle{s}. Tap the glowing candle or use the guide/auto.",
     toast_locked: "That night hasn't arrived yet. Enable Demo mode.",
     countdown_tpl: "{d}d {h}h {m}m until the first candle",
-    status_first: "⌛ It's not Hanukkah yet. First candle: {date}, {time}.",
-    status_ready_full: "🕎 It's time to light the candles!"
+    countdown_next: "Next candle in {d}d {h}h {m}m",
+    countdown_last: "Last night lit",
+    status_first: "⌛ It's not Hanukkah yet. First candle: {time}",
+    status_ready_night: "🔥 Time to light! Night {n} of Hanukkah ({time})",
+    status_ready_full: "🕎 It's time to light the candles!",
+    demo_on: "🎓 Demo: ON",
+    demo_off: "🎓 Demo mode"
   }
 };
 
@@ -114,13 +122,16 @@ function setLanguage(lang) {
   document.documentElement.lang = lang;
   updateTexts();
   updateLangButtons();
-  // Re-renderizar los textos dinámicos que ya están en pantalla
   if (typeof renderDayTabs === 'function') renderDayTabs(currentNight);
   if (typeof setNight === 'function' && typeof currentNight !== 'undefined') {
     const active = typeof getActiveNight === 'function' ? getActiveNight() : 1;
     setNight(currentNight, !demoMode && currentNight > active);
   }
   if (typeof recompute === 'function') recompute();
+  if (typeof toggleDemo === 'function') {
+    const btn = document.getElementById('demoBtn');
+    if (btn) btn.textContent = demoMode ? t('demo_on') : t('demo_off');
+  }
 }
 
 function updateTexts() {
@@ -148,17 +159,14 @@ function updateLangButtons() {
   if (en) en.classList.toggle('active', currentLang === 'en');
 }
 
-// Función auxiliar para obtener texto dinámico
 function t(key) {
   return translations[currentLang][key] || key;
 }
 
-// Helper para reemplazar {n} en plantillas
 function tReplace(key, n) {
   return t(key).replace(/\{n\}/g, n);
 }
 
-// Helper para reemplazar múltiples placeholders
 function tFormat(key, vars) {
   let txt = t(key);
   for (const k in vars) {
